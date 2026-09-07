@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Finanças na Mão</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.70.0/phaser.min.js"></script>
+  </head>
+
+  <body>
+    <div id="game-wrapper">
+      <div id="game-top-controls">
+        <div class="volume-container">
+          <button
+            id="volume-btn"
+            class="top-control-btn"
+            title="Ajustar Volume"
+          >
+            🔊 <span id="volume-label">100%</span>
+          </button>
+          <div id="volume-popup" class="hidden">
+            <input
+              type="range"
+              id="volume-slider"
+              min="0"
+              max="1"
+              step="0.05"
+              value="0.2"
+            />
+          </div>
+        </div>
+        <button id="pause-btn" class="top-control-btn" title="Pausar Jogo">
+          ⏸ Pausar
+        </button>
+      </div>
+      <div id="game-container"></div>
+      <div id="pause-modal" class="hidden">
+        <div class="modal-content">
+          <h2>Jogo Pausado</h2>
+          <button id="resume-btn" class="menu-btn">Continuar</button>
+        </div>
+      </div>
+
+      <div id="touch-controls">
+        <button
+          id="btn-left"
+          class="touch-btn"
+          aria-label="Mover para a esquerda"
+        >
+          ◀
+        </button>
+        <button
+          id="btn-right"
+          class="touch-btn"
+          aria-label="Mover para a direita"
+        >
+          ▶
+        </button>
+      </div>
+
+      <!-- HUD -->
+      <div id="hud">
+        <div id="hud-left" class="hud-card">
+          <div class="hud-card-top">
+            <img
+              id="hud-character-icon"
+              src="assets/thumbnails/city_men_1.png"
+              alt="Personagem"
+            />
+            <div id="hud-lives"></div>
+          </div>
+          <div class="hud-card-row">🪙 <span id="score-value">0</span></div>
+          <div class="hud-card-row hud-phase-info">
+            <span id="phase-label"></span>
+            <strong id="phase-name"></strong>
+          </div>
+          <div class="hud-card-row hud-small">
+            📖
+            <span id="hud-murais-count">0</span>/
+            <span id="hud-murais-total">0</span>
+          </div>
+          <div class="hud-card-row hud-small" id="hud-objective"></div>
+        </div>
+      </div>
+
+      <!-- Apresentação do título da fase -->
+      <div id="phase-intro" class="hidden">
+        <span id="phase-intro-label"></span>
+        <strong id="phase-intro-name"></strong>
+      </div>
+
+      <!-- Caixa de informação -->
+      <div id="info-bubble" class="info-bubble-hidden">
+        <span class="info-bubble-content"></span>
+      </div>
+
+      <!-- Overlay de batalha do boss -->
+      <div id="boss-overlay" class="hidden">
+        <div id="boss-dialogue" class="boss-dialogue">
+          <div class="boss-name-tag" id="boss-name"></div>
+          <p id="question-text" class="question-bubble"></p>
+        </div>
+
+        <div id="boss-answers-panel" class="boss-answers-panel hidden">
+          <div class="timer-badge" id="dialogue-header"></div>
+          <div id="question-options"></div>
+        </div>
+      </div>
+
+      <!-- Modal de QR Code (Merchan Sebrae) -->
+      <div id="qrcode-modal" class="hidden">
+        <div class="qrcode-content">
+          <h2 id="qrcode-title">Finanças na Mão</h2>
+          <p id="qrcode-text">Aponte a câmera do seu celular e conheça a solução do Sebrae para organizar e transformar a gestão do seu caixa:</p>
+          <div class="qrcode-frame">
+            <!-- Renomeei a imagem para refletir o novo produto -->
+            <img id="qrcode-img" src="assets/images/qrcode_financas.png" alt="QR Code Finanças na Mão" />
+          </div>
+          <button id="qrcode-close-btn" class="menu-btn">Continuar (<span id="qrcode-timer">30</span>s)</button>
+        </div>
+      </div>
+
+      <!-- Tela final -->
+      <div id="end-overlay" class="hidden">
+        <div class="end-panel">
+          <h2 id="end-title"></h2>
+          <p id="end-message"></p>
+          <div id="end-score"></div>
+          <div id="end-buttons">
+            <button id="view-ranking-btn">Ver ranking</button>
+            <button id="restart-btn">Jogar novamente</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de Ranking -->
+      <div id="ranking-overlay" class="hidden">
+        <div class="ranking-panel">
+          <h2>🏆 Ranking Top 10</h2>
+          <div id="ranking-list-content"></div>
+          <button id="close-ranking-btn">Fechar</button>
+        </div>
+      </div>
+
+      <!-- ================= MENU INICIAL ================= -->
+      <div id="start-overlay">
+        <div class="menu-wrapper">
+          <!-- MENU PRINCIPAL -->
+          <div id="panel-menu" class="menu-panel">
+            <h1>Finanças na Mão</h1>
+            <p class="tagline">Domine o caixa do seu negócio.</p>
+            <div class="menu-buttons">
+              <button class="menu-btn menu-btn-play" data-target="panel-name">
+                ▶ Jogar
+              </button>
+              <button class="menu-btn" data-target="panel-ranking">
+                🏆 Ranking
+              </button>
+              <button class="menu-btn" data-target="panel-rules">
+                📋 Regras
+              </button>
+              <button class="menu-btn" data-target="panel-empresa">
+                🏢 Sobre a Empresa
+              </button>
+              <button class="menu-btn" data-target="panel-criador">
+                👤 Criador
+              </button>
+            </div>
+          </div>
+
+          <!-- ESCOLHA DE PERSONAGEM + NOME -->
+          <div id="panel-name" class="menu-panel hidden">
+            <h2>Antes de começar...</h2>
+            <label>Escolha seu personagem</label>
+            <div id="character-select" class="character-grid">
+              <button
+                class="character-option selected"
+                data-character="city_men_1"
+              >
+                <img
+                  src="assets/thumbnails/city_men_1.png"
+                  alt="Personagem 1"
+                />
+              </button>
+              <button class="character-option" data-character="city_girl_1">
+                <img
+                  src="assets/thumbnails/city_girl_1.png"
+                  alt="Personagem 2"
+                />
+              </button>
+              <button class="character-option" data-character="city_men_3">
+                <img
+                  src="assets/thumbnails/city_men_3.png"
+                  alt="Personagem 3"
+                />
+              </button>
+            </div>
+
+            <label for="player-name-start">Como podemos te chamar?</label>
+            <input
+              id="player-name-start"
+              type="text"
+              maxlength="24"
+              placeholder="Digite seu nome"
+              autocomplete="off"
+            />
+            <p id="name-warning" class="hidden">
+              Digite seu nome antes de começar 🙂
+            </p>
+            <div class="panel-actions">
+              <button id="confirm-name-btn">Confirmar e Jogar</button>
+              <button class="back-btn" data-target="panel-menu">Voltar</button>
+            </div>
+          </div>
+
+          <!-- RANKING -->
+          <div id="panel-ranking" class="menu-panel hidden">
+            <h2>🏆 Ranking Top 10</h2>
+            <div id="ranking-list-menu"></div>
+            <button class="back-btn" data-target="panel-menu">Voltar</button>
+          </div>
+
+          <!-- REGRAS -->
+          <div id="panel-rules" class="menu-panel hidden">
+            <h2>📋 Como jogar</h2>
+            <ul>
+              <li><strong>Controles:</strong> Setas na tela ou teclado (A/D).</li>
+              <li><strong>Objetivo:</strong> Avance pelas 4 fases organizando o caixa do negócio.</li>
+              <li><strong>Desafios:</strong> Responda aos quizzes de gestão financeira.</li>
+              <li><strong>Vidas e Pontos:</strong> Errar perde vida. Acertar rápido dá mais pontos!</li>
+              <li><strong>Dica:</strong> Leia sempre os murais nas paredes para aprender antes de responder.</li>
+            </ul>
+            <button class="back-btn" data-target="panel-menu">Voltar</button>
+          </div>
+
+          <!-- SOBRE A EMPRESA -->
+          <div id="panel-empresa" class="menu-panel hidden">
+            <h2>🏢 Sobre a Empresa</h2>
+            <p>
+              O <strong>Sebrae RN</strong> é uma entidade privada, sem fins
+              lucrativos, que promove a competitividade e o desenvolvimento
+              sustentável dos pequenos negócios, estimulando o empreendedorismo
+              e fortalecendo a economia do estado do Rio Grande do Norte.
+            </p>
+
+            <p class="link">
+              <strong>Instagram:</strong>
+              <a
+                href="https://www.instagram.com/sebraern"
+                target="_blank"
+                rel="noopener noreferrer"
+                >@sebraern</a
+              >
+            </p>
+            <p class="link">
+              <strong>Site:</strong>
+              <a
+                href="https://www.rn.sebrae.com.br"
+                target="_blank"
+                rel="noopener noreferrer"
+                >www.rn.sebrae.com.br</a
+              >
+            </p>
+            <button class="back-btn" data-target="panel-menu">Voltar</button>
+          </div>
+
+          <!-- CRIADOR -->
+          <div id="panel-criador" class="menu-panel hidden">
+            <h2>👤 Criador</h2>
+            <p>
+              Olá! Me chamo <strong>Matheus Sena</strong>, ex-estagiário do
+              <strong>Sebrae</strong> e estudante de
+              <strong>Tecnologia em Análise e Desenvolvimento de Sistemas
+                (IFRN)</strong
+              >
+              e <strong>Engenharia de Software (UNOPAR)</strong>. Desenvolvi
+              este jogo para mostrar como a <strong>gamificação</strong> pode
+              tornar o aprendizado mais divertido e acessível.
+            </p>
+
+            <p class="link">
+              <strong>Instagram:</strong>
+              <a
+                href="https://www.instagram.com/__matheussena?igsh=MXdwbmloNDM1c2VpZQ=="
+                target="_blank"
+                rel="noopener noreferrer"
+                >@__matheussena</a
+              >
+            </p>
+            <p class="link">
+              <strong>Github:</strong>
+              <a
+                href="https://github.com/matheussena45"
+                target="_blank"
+                rel="noopener noreferrer"
+                >github.com/matheussena45</a
+              >
+            </p>
+            <button class="back-btn" data-target="panel-menu">Voltar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html>
