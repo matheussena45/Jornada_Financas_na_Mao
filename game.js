@@ -110,7 +110,7 @@ function resetGameData() {
 // CONTEÚDO DAS FASES
 // ---------------------------------------------------------
 const PHASES = [
-  /*{
+  {
     id: "fase1",
     name: "Padaria do Bairro",
     startX: 550,
@@ -555,7 +555,7 @@ const PHASES = [
         text: "Projeção é tudo. Se você tem 8 mil a receber e 12 mil a pagar no mês, terá uma necessidade de caixa de 4 mil. Antecipe-se com o Fluxo de Caixa!",
       },
     ],
-  },*/
+  },
   {
     id: "fase5",
     name: "Sala do Chefe",
