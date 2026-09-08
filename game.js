@@ -3,10 +3,10 @@
 // =========================================================
 
 const RANKING_KEY = "financas_na_mao_v1";
-const MAX_LIVES = 6;
-const INFO_PROXIMITY_RADIUS = 90; 
-const ANSWER_SECONDS = 15; 
-const ONCE_BUBBLE_MIN_MS = 4500; 
+const MAX_LIVES = 1;
+const INFO_PROXIMITY_RADIUS = 90;
+const ANSWER_SECONDS = 15;
+const ONCE_BUBBLE_MIN_MS = 4500;
 const NARRATIVE_TYPE_SPEED_MS = 45;
 const NARRATIVE_DEFAULT_DURATION_MS = 4000;
 
@@ -14,9 +14,9 @@ const NARRATIVE_DEFAULT_DURATION_MS = 4000;
 // TEMA / IDENTIDADE VISUAL
 // ---------------------------------------------------------
 const THEME = {
-  primary: 0x1a4329,      // Verde-escuro financeiro
-  primaryDark: 0x0d2415,  // Verde muito escuro (fundos)
-  accent: 0xf2a900,       // Dourado
+  primary: 0x1a4329, // Verde-escuro financeiro
+  primaryDark: 0x0d2415, // Verde muito escuro (fundos)
+  accent: 0xf2a900, // Dourado
   accentLight: 0xffe27a,
   cream: 0xf5f0e6,
   danger: 0xc0392b,
@@ -36,6 +36,8 @@ const SFX = {
   locked: new Audio("assets/audio/locked.mp3"),
   unlock: new Audio("assets/audio/unlock.mp3"),
   complete: new Audio("assets/audio/completed.wav"),
+  victory: new Audio("assets/audio/victory.mp3"),
+  gameover: new Audio("assets/audio/gameover.mp3"),
 };
 SFX.bgm.loop = true;
 SFX.bgm.volume = 0.2;
@@ -73,7 +75,7 @@ const CHARACTERS = [
 ];
 const CHARACTER_FRAME_SIZE = 128;
 const CHARACTER_BODY = { width: 44, height: 70, offsetX: 42, offsetY: 58 };
-const CHARACTER_SCALE = 2.7; 
+const CHARACTER_SCALE = 2.7;
 
 // ---------------------------------------------------------
 // ESTADO GLOBAL DO JOGO
@@ -84,12 +86,12 @@ const GameData = {
   lives: MAX_LIVES,
   score: 0,
   phaseIndex: 0,
-  infosSeen: new Set(), 
+  infosSeen: new Set(),
   correctAnswers: 0,
   startTime: null,
-  paused: false, 
-  sessionId: 0, 
-  hasEnded: false, 
+  paused: false,
+  sessionId: 0,
+  hasEnded: false,
 };
 
 function resetGameData() {
@@ -150,7 +152,7 @@ const PHASES = [
     groundColor: 0x1f2438,
     decorColor: 0x161a2b,
     levelWidth: 1990,
-    bg: "test1.jpg",
+    bg: "street_night_bg.jpg",
     bossX: 1850,
     bossY: 485,
     doorX: 1850,
@@ -182,7 +184,8 @@ const PHASES = [
       },
       portraitHeight: 170,
       dialogueBottom: 200,
-      greeting: "Te vi fechando a padaria de cabeça quente. Sei bem como é, também quase fechei as portas no meu primeiro ano misturando as contas e vendendo sem controle. Deixa eu te dar umas dicas:",
+      greeting:
+        "Te vi fechando a padaria de cabeça quente. Sei bem como é, também quase fechei as portas no meu primeiro ano misturando as contas e vendendo sem controle. Deixa eu te dar umas dicas:",
       introLines: [
         "Para começar, vamos falar do essencial:",
         "Boa reflexão! Próxima questão:",
@@ -207,66 +210,126 @@ const PHASES = [
       questions: [
         {
           q: "Para que serve o fluxo de caixa?",
-          options: ["Controlar funcionários", "Controlar entradas e saídas de dinheiro", "Fazer propaganda", "Calcular estoque"],
+          options: [
+            "Controlar funcionários",
+            "Controlar entradas e saídas de dinheiro",
+            "Fazer propaganda",
+            "Calcular estoque",
+          ],
           correct: 1,
-          explanation: "O fluxo de caixa é o pulmão financeiro do negócio. Ele registra todo o dinheiro que realmente entra e sai diariamente."
+          explanation:
+            "O fluxo de caixa é o pulmão financeiro do negócio. Ele registra todo o dinheiro que realmente entra e sai diariamente.",
         },
         {
           q: "Para formar o preço de venda, é importante conhecer:",
-          options: ["Apenas o concorrente", "Custos, despesas e margem desejada", "Apenas o custo do produto", "Apenas o valor que o cliente aceita"],
+          options: [
+            "Apenas o concorrente",
+            "Custos, despesas e margem desejada",
+            "Apenas o custo do produto",
+            "Apenas o valor que o cliente aceita",
+          ],
           correct: 1,
-          explanation: "O preço deve cobrir tudo o que você gasta (custos e despesas) e ainda deixar a sua margem de lucro projetada."
+          explanation:
+            "O preço deve cobrir tudo o que você gasta (custos e despesas) e ainda deixar a sua margem de lucro projetada.",
         },
         {
           q: "O que é lucro?",
-          options: ["Tudo que a empresa vende", "Todo dinheiro que entra no caixa", "O resultado após descontar custos e despesas", "O dinheiro investido pelo dono"],
+          options: [
+            "Tudo que a empresa vende",
+            "Todo dinheiro que entra no caixa",
+            "O resultado após descontar custos e despesas",
+            "O dinheiro investido pelo dono",
+          ],
           correct: 2,
-          explanation: "Lucro não é faturamento. Lucro é o valor limpo que sobra para a empresa após todas as obrigações serem pagas."
+          explanation:
+            "Lucro não é faturamento. Lucro é o valor limpo que sobra para a empresa após todas as obrigações serem pagas.",
         },
         {
           q: "O pró-labore é:",
-          options: ["O faturamento", "A remuneração do sócio pelo trabalho", "O lucro da empresa", "Uma reserva de emergência"],
+          options: [
+            "O faturamento",
+            "A remuneração do sócio pelo trabalho",
+            "O lucro da empresa",
+            "Uma reserva de emergência",
+          ],
           correct: 1,
-          explanation: "O pró-labore é o 'salário' do dono. Ele deve ter um valor fixo mensal, evitando que você tire dinheiro do caixa toda hora."
+          explanation:
+            "O pró-labore é o 'salário' do dono. Ele deve ter um valor fixo mensal, evitando que você tire dinheiro do caixa toda hora.",
         },
         {
           q: "O controle financeiro deve ser feito:",
-          options: ["Apenas quando faltar dinheiro", "Apenas no fim do ano", "Regularmente, para tomar boas decisões", "Só pelo contador"],
+          options: [
+            "Apenas quando faltar dinheiro",
+            "Apenas no fim do ano",
+            "Regularmente, para tomar boas decisões",
+            "Só pelo contador",
+          ],
           correct: 2,
-          explanation: "Acompanhamento frequente permite enxergar rombos antecipadamente e agir rápido, como no caso dos fiados."
+          explanation:
+            "Acompanhamento frequente permite enxergar rombos antecipadamente e agir rápido, como no caso dos fiados.",
         },
         {
           q: "Faturamento e lucro são a mesma coisa?",
-          options: ["Sim, sempre", "Não. Lucro desconta custos e despesas do faturamento", "Sim, quando a venda é à vista", "Apenas para empresas sem funcionários"],
+          options: [
+            "Sim, sempre",
+            "Não. Lucro desconta custos e despesas do faturamento",
+            "Sim, quando a venda é à vista",
+            "Apenas para empresas sem funcionários",
+          ],
           correct: 1,
-          explanation: "Faturamento é toda a receita de vendas. Lucro é o que sobra após você pagar o pão, a energia e os funcionários."
+          explanation:
+            "Faturamento é toda a receita de vendas. Lucro é o que sobra após você pagar o pão, a energia e os funcionários.",
         },
         {
           q: "O dinheiro da empresa deve ser separado do dinheiro pessoal?",
-          options: ["Não, se o negócio for pequeno", "Apenas quando houver funcionários", "Sim, para organizar e conhecer as finanças", "Apenas para empresas grandes"],
+          options: [
+            "Não, se o negócio for pequeno",
+            "Apenas quando houver funcionários",
+            "Sim, para organizar e conhecer as finanças",
+            "Apenas para empresas grandes",
+          ],
           correct: 2,
-          explanation: "O princípio da Entidade diz que o patrimônio da empresa e do dono são distintos. Contas misturadas mascaram o prejuízo."
+          explanation:
+            "O princípio da Entidade diz que o patrimônio da empresa e do dono são distintos. Contas misturadas mascaram o prejuízo.",
         },
         {
           q: "Qual destes é um exemplo de despesa fixa?",
-          options: ["Comissão sobre vendas", "Taxa da maquininha por venda", "Aluguel do estabelecimento", "Embalagem utilizada"],
+          options: [
+            "Comissão sobre vendas",
+            "Taxa da maquininha por venda",
+            "Aluguel do estabelecimento",
+            "Embalagem utilizada",
+          ],
           correct: 2,
-          explanation: "O aluguel chega todo mês, mesmo se a padaria não vender um pão sequer. Ele não varia com a quantidade produzida."
+          explanation:
+            "O aluguel chega todo mês, mesmo se a padaria não vender um pão sequer. Ele não varia com a quantidade produzida.",
         },
         {
           q: "O que é uma despesa variável?",
-          options: ["Uma despesa que varia conforme as vendas", "Uma despesa paga uma vez por ano", "Uma retirada do proprietário", "Uma conta que nunca muda"],
+          options: [
+            "Uma despesa que varia conforme as vendas",
+            "Uma despesa paga uma vez por ano",
+            "Uma retirada do proprietário",
+            "Uma conta que nunca muda",
+          ],
           correct: 0,
-          explanation: "Quanto mais você vende, mais gasta com farinha, embalagens e taxas de maquininha. Isso é despesa variável."
+          explanation:
+            "Quanto mais você vende, mais gasta com farinha, embalagens e taxas de maquininha. Isso é despesa variável.",
         },
         {
           q: "Registrar todas as entradas e saídas ajuda a empresa a:",
-          options: ["Pagar menos impostos", "Tomar decisões com informações seguras", "Eliminar todos os custos", "Não precisar de planejamento"],
+          options: [
+            "Pagar menos impostos",
+            "Tomar decisões com informações seguras",
+            "Eliminar todos os custos",
+            "Não precisar de planejamento",
+          ],
           correct: 1,
-          explanation: "Só quem domina os números toma boas decisões, como saber o momento exato de cobrar um cliente ou cortar despesas."
-        }
-      ]
-    }
+          explanation:
+            "Só quem domina os números toma boas decisões, como saber o momento exato de cobrar um cliente ou cortar despesas.",
+        },
+      ],
+    },
   },
   {
     id: "fase3",
@@ -279,12 +342,12 @@ const PHASES = [
     exitDirection: "forward",
     phaseNumber: 3,
     phaseLabel: "Ato 3",
-    skyColor: 0x5a8fb2, 
+    skyColor: 0x5a8fb2,
     groundColor: 0x8a95a5,
     decorColor: 0x4a5d73,
     levelWidth: 1990,
-    bg: "test2.jpg", 
-    bossX: 1650, 
+    bg: "street_day_bg.jpg",
+    bossX: 1650,
     bossY: 485,
     doorX: 1650,
     groundY: 520,
@@ -309,13 +372,14 @@ const PHASES = [
     boss: {
       name: "Analista Financeiro",
       portrait: {
-        idle: "boss2_idle.png", 
+        idle: "boss2_idle.png",
         talk: "boss2_talk.png",
         blink: "boss2_blink.png",
       },
       portraitHeight: 200,
       dialogueBottom: 240,
-      greeting: "Olá! Vi você observando nossa fachada. Sou analista aqui no Sebrae. Pela sua expressão, o fluxo de caixa da padaria apertou, não é? Antes de entrarmos para usar o Finanças na Mão, preciso saber: você está realmente no controle do seu negócio?",
+      greeting:
+        "Olá! Vi você observando nossa fachada. Sou analista aqui no Sebrae. Pela sua expressão, o fluxo de caixa da padaria apertou, não é? Antes de entrarmos para usar o Finanças na Mão, preciso saber: você está realmente no controle do seu negócio?",
       introLines: [
         "Vamos ao primeiro teste de controle:",
         "Muito bem, vamos aprofundar a gestão:",
@@ -342,64 +406,119 @@ const PHASES = [
           q: "Uma empresa vende muito, mas constantemente falta dinheiro. O que deve analisar primeiro?",
           options: ["Logomarca", "Fluxo de caixa", "Redes sociais", "Fachada"],
           correct: 1,
-          explanation: "Faturamento alto não garante saldo positivo. O Fluxo de Caixa mostra exatamente onde o dinheiro está vazando."
+          explanation:
+            "Faturamento alto não garante saldo positivo. O Fluxo de Caixa mostra exatamente onde o dinheiro está vazando.",
         },
         {
           q: "Você quer dar 20% de desconto em um produto. Antes disso, precisa saber:",
-          options: ["Se o concorrente também dará desconto", "Se sua margem suporta esse desconto", "Se o cliente compra à vista", "Quanto tem na conta"],
+          options: [
+            "Se o concorrente também dará desconto",
+            "Se sua margem suporta esse desconto",
+            "Se o cliente compra à vista",
+            "Quanto tem na conta",
+          ],
           correct: 1,
-          explanation: "Desconto sai direto do seu lucro. Se a margem não suportar, você estará pagando para vender o pão."
+          explanation:
+            "Desconto sai direto do seu lucro. Se a margem não suportar, você estará pagando para vender o pão.",
         },
         {
           q: "O que é capital de giro?",
-          options: ["Dinheiro para manter a operação da empresa", "O lucro anual da empresa", "Um tipo de imposto", "O patrimônio pessoal do dono"],
+          options: [
+            "Dinheiro para manter a operação da empresa",
+            "O lucro anual da empresa",
+            "Um tipo de imposto",
+            "O patrimônio pessoal do dono",
+          ],
           correct: 0,
-          explanation: "É a reserva necessária para pagar fornecedores e despesas diárias enquanto o dinheiro das vendas a prazo não entra."
+          explanation:
+            "É a reserva necessária para pagar fornecedores e despesas diárias enquanto o dinheiro das vendas a prazo não entra.",
         },
         {
           q: "Uma retirada pessoal frequente e sem controle pode acarretar em:",
-          options: ["Melhorar o caixa", "Comprometer as finanças da empresa", "Aumentar a margem", "Reduzir os custos"],
+          options: [
+            "Melhorar o caixa",
+            "Comprometer as finanças da empresa",
+            "Aumentar a margem",
+            "Reduzir os custos",
+          ],
           correct: 1,
-          explanation: "Retiradas aleatórias (sem ser um pró-labore fixo) desfalcam o capital de giro e deixam a empresa sem dinheiro para girar."
+          explanation:
+            "Retiradas aleatórias (sem ser um pró-labore fixo) desfalcam o capital de giro e deixam a empresa sem dinheiro para girar.",
         },
         {
           q: "As taxas cobradas pelas maquininhas de cartão são iguais para todas as empresas?",
-          options: ["Sim, as taxas são padronizadas", "Sim, mudam apenas conforme o banco", "Não. Variam conforme operadora, modalidade e negociação", "Não, mas variam apenas pelo faturamento"],
+          options: [
+            "Sim, as taxas são padronizadas",
+            "Sim, mudam apenas conforme o banco",
+            "Não. Variam conforme operadora, modalidade e negociação",
+            "Não, mas variam apenas pelo faturamento",
+          ],
           correct: 2,
-          explanation: "Sempre negocie as taxas. Elas comem parte da sua margem e cada centavo conta no fim do mês."
+          explanation:
+            "Sempre negocie as taxas. Elas comem parte da sua margem e cada centavo conta no fim do mês.",
         },
         {
           q: "Sua empresa vende a prazo, mas paga fornecedores à vista. Qual ponto merece atenção?",
-          options: ["O prazo entre pagamentos e recebimentos", "A quantidade de seguidores", "A logomarca", "O tamanho do estoque"],
+          options: [
+            "O prazo entre pagamentos e recebimentos",
+            "A quantidade de seguidores",
+            "A logomarca",
+            "O tamanho do estoque",
+          ],
           correct: 0,
-          explanation: "Esse é o Ciclo Financeiro. Se você paga antes de receber, precisará de muito capital de giro para não ficar no vermelho."
+          explanation:
+            "Esse é o Ciclo Financeiro. Se você paga antes de receber, precisará de muito capital de giro para não ficar no vermelho.",
         },
         {
           q: "Um produto vende bastante, mas você não sabe se ele dá lucro. O que precisa conhecer?",
-          options: ["Apenas a quantidade vendida", "Seus custos, despesas, preço e margem", "Apenas o preço do concorrente", "O saldo da conta bancária"],
+          options: [
+            "Apenas a quantidade vendida",
+            "Seus custos, despesas, preço e margem",
+            "Apenas o preço do concorrente",
+            "O saldo da conta bancária",
+          ],
           correct: 1,
-          explanation: "Volume não significa rentabilidade. É preciso analisar toda a estrutura de custos do produto para saber se ele é viável."
+          explanation:
+            "Volume não significa rentabilidade. É preciso analisar toda a estrutura de custos do produto para saber se ele é viável.",
         },
         {
           q: "Antes de fazer uma compra grande para o estoque, o empreendedor deve avaliar:",
-          options: ["Apenas o desconto oferecido", "A necessidade da compra e seu impacto no caixa", "Apenas o preço do fornecedor", "O número de clientes cadastrados"],
+          options: [
+            "Apenas o desconto oferecido",
+            "A necessidade da compra e seu impacto no caixa",
+            "Apenas o preço do fornecedor",
+            "O número de clientes cadastrados",
+          ],
           correct: 1,
-          explanation: "Estoque parado é dinheiro parado. Descontos grandes só compensam se você tiver fluxo de caixa para suportar o pagamento."
+          explanation:
+            "Estoque parado é dinheiro parado. Descontos grandes só compensam se você tiver fluxo de caixa para suportar o pagamento.",
         },
         {
           q: "Um cliente compra hoje no cartão e você recebe depois. Esse prazo deve ser considerado em qual controle?",
-          options: ["Fluxo de caixa", "Controle de funcionários", "Plano de marketing", "Cadastro de clientes"],
+          options: [
+            "Fluxo de caixa",
+            "Controle de funcionários",
+            "Plano de marketing",
+            "Cadastro de clientes",
+          ],
           correct: 0,
-          explanation: "A venda acontece hoje, mas a entrada de dinheiro será futura. O Fluxo de Caixa precisa prever exatamente a data do recebimento."
+          explanation:
+            "A venda acontece hoje, mas a entrada de dinheiro será futura. O Fluxo de Caixa precisa prever exatamente a data do recebimento.",
         },
         {
           q: "Se os custos aumentam e o preço de venda continua igual, o que tende a acontecer?",
-          options: ["A margem aumenta", "A margem diminui", "O faturamento dobra", "O lucro aumenta automaticamente"],
+          options: [
+            "A margem aumenta",
+            "A margem diminui",
+            "O faturamento dobra",
+            "O lucro aumenta automaticamente",
+          ],
           correct: 1,
-          explanation: "Se a farinha fica mais cara e o pão continua com o mesmo preço, a diferença é engolida, esmagando a sua margem de lucro."
-        }
-      ]
-    }
+          explanation:
+            "Se a farinha fica mais cara e o pão continua com o mesmo preço, a diferença é engolida, esmagando a sua margem de lucro.",
+        },
+      ],
+    },
   },
   {
     id: "fase4",
@@ -414,7 +533,7 @@ const PHASES = [
     skyColor: 0x18233d,
     groundColor: 0x2c3350,
     decorColor: 0x22304f,
-    levelWidth: 1200, 
+    levelWidth: 1200,
     bg: "test3.jpg", // Substituir pelo background final
     bossX: 950,
     bossY: 485,
@@ -431,27 +550,28 @@ const PHASES = [
       },
       portraitHeight: 200,
       dialogueBottom: 240,
-      greeting: "Bem-vindo ao Sebrae! Chegou a hora de provar que você está pronto para utilizar o Finanças na Mão de forma definitiva.",
+      greeting:
+        "Bem-vindo ao Sebrae! Chegou a hora de provar que você está pronto para utilizar o Finanças na Mão de forma definitiva.",
       introLines: [
         "Vamos ao primeiro teste avançado:",
         "Muito bem, vamos continuar:",
-        "Última pergunta para fecharmos com chave de ouro:"
+        "Última pergunta para fecharmos com chave de ouro:",
       ],
       correctLines: [
         "Excelente! Você está dominando isso.",
         "Exato! É assim que se pensa no longo prazo.",
-        "Perfeito! Não tenho mais o que ensinar a você."
+        "Perfeito! Não tenho mais o que ensinar a você.",
       ],
       wrongLines: [
         "Atenção nesse detalhe, ele é crucial:",
         "Não foi bem isso, entenda o motivo:",
-        "Cuidado com essa armadilha comum:"
+        "Cuidado com essa armadilha comum:",
       ],
       resultMessages: {
         3: "Brilhante! Você está totalmente pronto para gerir as finanças da sua padaria.",
         2: "Muito bom trabalho. Com a nossa plataforma, essas pequenas dúvidas sumirão rapidinho.",
         1: "Temos um longo caminho pela frente, mas estamos aqui para ajudar.",
-        0: "Foi bom você ter vindo ao Sebrae. Vamos precisar recomeçar do zero sua gestão!"
+        0: "Foi bom você ter vindo ao Sebrae. Vamos precisar recomeçar do zero sua gestão!",
       },
       questions: [
         // Adicione as perguntas da Fase 4 aqui no mesmo formato
@@ -459,11 +579,11 @@ const PHASES = [
           q: "Pergunta placeholder Fase 4?",
           options: ["Opção 1", "Opção 2", "Opção 3", "Opção 4"],
           correct: 0,
-          explanation: "Explicação."
-        }
-      ]
-    }
-  }
+          explanation: "Explicação.",
+        },
+      ],
+    },
+  },
 ];
 
 // ---------------------------------------------------------
@@ -497,11 +617,15 @@ function shuffleQuestion(question) {
 
 function updateHUD() {
   const currentPhase = PHASES[GameData.phaseIndex];
-  document.getElementById("hud-objective").textContent = currentPhase?.objectiveHint ?? "";
-  document.getElementById("hud-lives").textContent = "❤️".repeat(Math.max(GameData.lives, 0)) || "💀";
+  document.getElementById("hud-objective").textContent =
+    currentPhase?.objectiveHint ?? "";
+  document.getElementById("hud-lives").textContent =
+    "❤️".repeat(Math.max(GameData.lives, 0)) || "💀";
   document.getElementById("score-value").textContent = GameData.score;
   if (!currentPhase) return;
-  document.getElementById("phase-label").textContent = currentPhase.phaseLabel ?? `Fase ${currentPhase.phaseNumber ?? GameData.phaseIndex + 1}`;
+  document.getElementById("phase-label").textContent =
+    currentPhase.phaseLabel ??
+    `Fase ${currentPhase.phaseNumber ?? GameData.phaseIndex + 1}`;
   document.getElementById("phase-name").textContent = currentPhase.name;
 }
 
@@ -543,7 +667,12 @@ function renderRankingInto(elId) {
     el.innerHTML = "<p>Ninguém no ranking ainda. Seja o primeiro!</p>";
     return;
   }
-  const items = list.map((r) => `<li>${escapeHtml(r.name)} — ${r.score} pts (${r.time}s) — ${r.date}</li>`).join("");
+  const items = list
+    .map(
+      (r) =>
+        `<li>${escapeHtml(r.name)} — ${r.score} pts (${r.time}s) — ${r.date}</li>`,
+    )
+    .join("");
   el.innerHTML = `<ol>${items}</ol>`;
 }
 
@@ -557,13 +686,15 @@ function escapeHtml(str) {
 // FÓRMULA DE PONTUAÇÃO
 // ---------------------------------------------------------
 function computeFinalScore() {
-  const livesBonus = GameData.lives * 50; 
+  const livesBonus = GameData.lives * 50;
   return GameData.score + livesBonus;
 }
 
 function formatMessageForScore(score) {
-  if (score >= 1000) return "Excelente empresário! Você domina os conceitos essenciais da gestão.";
-  if (score >= 700) return "Muito bom! Você já entende bastante, mas ainda pode evoluir.";
+  if (score >= 1000)
+    return "Excelente empresário! Você domina os conceitos essenciais da gestão.";
+  if (score >= 700)
+    return "Muito bom! Você já entende bastante, mas ainda pode evoluir.";
   return "Você deu o primeiro passo. Vale a pena revisar alguns conceitos com calma.";
 }
 
@@ -575,8 +706,12 @@ class KeyboardInputProvider {
     this.cursors = scene.input.keyboard.createCursorKeys();
     this.keys = scene.input.keyboard.addKeys({ A: "A", D: "D" });
   }
-  isLeft() { return this.cursors.left.isDown || this.keys.A.isDown; }
-  isRight() { return this.cursors.right.isDown || this.keys.D.isDown; }
+  isLeft() {
+    return this.cursors.left.isDown || this.keys.A.isDown;
+  }
+  isRight() {
+    return this.cursors.right.isDown || this.keys.D.isDown;
+  }
 }
 class TouchInputProvider {
   constructor() {
@@ -584,8 +719,14 @@ class TouchInputProvider {
     this.rightDown = false;
     const bind = (el, setter) => {
       if (!el) return;
-      const start = (e) => { e.preventDefault(); setter(true); };
-      const end = (e) => { e.preventDefault(); setter(false); };
+      const start = (e) => {
+        e.preventDefault();
+        setter(true);
+      };
+      const end = (e) => {
+        e.preventDefault();
+        setter(false);
+      };
       el.addEventListener("touchstart", start, { passive: false });
       el.addEventListener("touchend", end);
       el.addEventListener("touchcancel", end);
@@ -593,11 +734,19 @@ class TouchInputProvider {
       el.addEventListener("mouseup", end);
       el.addEventListener("mouseleave", end);
     };
-    bind(document.getElementById("btn-left"), (v) => { this.leftDown = v; });
-    bind(document.getElementById("btn-right"), (v) => { this.rightDown = v; });
+    bind(document.getElementById("btn-left"), (v) => {
+      this.leftDown = v;
+    });
+    bind(document.getElementById("btn-right"), (v) => {
+      this.rightDown = v;
+    });
   }
-  isLeft() { return this.leftDown; }
-  isRight() { return this.rightDown; }
+  isLeft() {
+    return this.leftDown;
+  }
+  isRight() {
+    return this.rightDown;
+  }
 }
 
 const touchInput = new TouchInputProvider();
@@ -607,9 +756,15 @@ class InputManager {
     this.providers = [new KeyboardInputProvider(scene), touchInput];
     this.enabled = true;
   }
-  setEnabled(v) { this.enabled = v; }
-  left() { return this.enabled && this.providers.some((p) => p.isLeft()); }
-  right() { return this.enabled && this.providers.some((p) => p.isRight()); }
+  setEnabled(v) {
+    this.enabled = v;
+  }
+  left() {
+    return this.enabled && this.providers.some((p) => p.isLeft());
+  }
+  right() {
+    return this.enabled && this.providers.some((p) => p.isRight());
+  }
 }
 
 // ---------------------------------------------------------
@@ -634,11 +789,33 @@ function drawPixelTexture(scene, key, rows, palette, pixelSize) {
 
 const BOSS_PALETTE = { R: THEME.danger, K: 0x1a1a1a, G: 0x555555 };
 const BOSS_FRAME = [
-  "..RRRRRRRRRR..", ".RRRRRRRRRRRR.", "RRRRKKKKKKRRRR", "RRRRK....KRRRR", "RRRRKKKKKKRRRR", ".RRRRRRRRRRRR.", ".RRRRRRRRRRRR.", "..RRRRRRRRRR..", "...GGGGGGGG...", "...GGGGGGGG...", "...GGGGGGGG...", "...GG....GG...", "...GG....GG...", "...GG....GG...",
+  "..RRRRRRRRRR..",
+  ".RRRRRRRRRRRR.",
+  "RRRRKKKKKKRRRR",
+  "RRRRK....KRRRR",
+  "RRRRKKKKKKRRRR",
+  ".RRRRRRRRRRRR.",
+  ".RRRRRRRRRRRR.",
+  "..RRRRRRRRRR..",
+  "...GGGGGGGG...",
+  "...GGGGGGGG...",
+  "...GGGGGGGG...",
+  "...GG....GG...",
+  "...GG....GG...",
+  "...GG....GG...",
 ];
 
 const POSTER_FRAME = [
-  "............", "...BBBBBB...", "..BWWWWWWB..", ".BWWWWWWWWB.", ".BWWDWDWDWB.", ".BWWWWWWWWB.", "..BWWWWWWB..", "...BBBBBB...", ".....BB.....", "....BB......",
+  "............",
+  "...BBBBBB...",
+  "..BWWWWWWB..",
+  ".BWWWWWWWWB.",
+  ".BWWDWDWDWB.",
+  ".BWWWWWWWWB.",
+  "..BWWWWWWB..",
+  "...BBBBBB...",
+  ".....BB.....",
+  "....BB......",
 ];
 
 const POSTER_PALETTE = {
@@ -649,7 +826,18 @@ const POSTER_PALETTE = {
 
 const DOOR_PALETTE = { F: 0x8a5a2b, D: 0x6b4423, K: THEME.accent };
 const DOOR_FRAME = [
-  "FFFFFFFFFF", "FDDDDDDDDF", "FDDDDDDDDF", "FDDDDDDDDF", "FDDDDDDDDF", "FDDDDDDDDF", "FDDDDKDDDF", "FDDDDDDDDF", "FDDDDDDDDF", "FDDDDDDDDF", "FDDDDDDDDF", "FFFFFFFFFF",
+  "FFFFFFFFFF",
+  "FDDDDDDDDF",
+  "FDDDDDDDDF",
+  "FDDDDDDDDF",
+  "FDDDDDDDDF",
+  "FDDDDDDDDF",
+  "FDDDDKDDDF",
+  "FDDDDDDDDF",
+  "FDDDDDDDDF",
+  "FDDDDDDDDF",
+  "FDDDDDDDDF",
+  "FFFFFFFFFF",
 ];
 
 function buildAllTextures(scene) {
@@ -672,16 +860,40 @@ function buildAllTextures(scene) {
 // ---------------------------------------------------------
 // TELA DE FIM DE JOGO
 // ---------------------------------------------------------
+// ---------------------------------------------------------
+// TELA DE FIM DE JOGO
+// ---------------------------------------------------------
 function endGame(won) {
   if (GameData.hasEnded) return; 
   GameData.hasEnded = true;
+
+  // Apenas silencia a música de fundo imediatamente
+  stopSfx(SFX.bgm);
 
   const elapsedSeconds = Math.floor((Date.now() - GameData.startTime) / 1000);
   const finalScore = computeFinalScore();
 
   saveRankingEntry(GameData.playerName, finalScore, elapsedSeconds);
 
+  // Esta função só será chamada DEPOIS do QR Code (se houver)
   const showGameOverScreen = () => {
+    
+    // ÁUDIOS E EFEITOS AGORA DISPARAM AQUI
+    if (won) {
+      playSfx(SFX.victory);
+      if (typeof confetti === "function") {
+        confetti({
+          particleCount: 250,
+          spread: 120,
+          origin: { y: 0.5 },
+          zIndex: 99999 
+        });
+      }
+    } else {
+      playSfx(SFX.gameover); // O som triste só toca quando essa tela aparecer!
+    }
+
+    // Mostra a interface
     document.getElementById("end-overlay").classList.remove("hidden");
     document.getElementById("end-title").textContent = won ? "🏆 Parabéns!" : "Game Over";
     document.getElementById("end-message").textContent = won
@@ -698,16 +910,18 @@ function endGame(won) {
     `;
   };
 
+  // Lógica de exibição: Se perdeu, exibe o QR Code primeiro e CHAMA a tela (com o som) depois.
   if (!won) {
     showQRCodeModal({
-      image: "assets/images/qrcode_acelerador.png",
+      image: "assets/images/qrcode_financas_na_mao.png",
       duration: 30,
       title: "Não desista do seu negócio!",
-      text: "Quer dominar o marketing e transformar seguidores em clientes reais? Aponte a câmera e conheça o Acelerador Digital do Sebrae antes de jogar novamente:"
+      text: "Quer dominar a gestão do seu caixa e parar de perder dinheiro? Aponte a câmera e conheça a solução Finanças na Mão do Sebrae:"
     }, () => {
       showGameOverScreen();
     });
   } else {
+    // Se ganhou, o QR code já passou lá no diálogo do boss, então vai direto pra tela final
     showGameOverScreen();
   }
 }
@@ -738,10 +952,22 @@ function positionBossDialogue(scene, bossSprite) {
   }
 }
 
-const BOSS_INTRO_LINES = ["Vamos testar seus conhecimentos sobre isso!", "Aqui vai a próxima pergunta:", "Última pergunta, vamos lá:"];
-const BOSS_CORRECT_LINES = ["Isso mesmo! Mandou bem.", "Perfeito, é exatamente isso!", "Excelente resposta!"];
-const BOSS_WRONG_LINES = ["Não foi dessa vez.", "Quase! Deixa eu te explicar:", "Essa é traiçoeira, mas vamos entender:"];
-const TYPE_SPEED_MS = 60; 
+const BOSS_INTRO_LINES = [
+  "Vamos testar seus conhecimentos sobre isso!",
+  "Aqui vai a próxima pergunta:",
+  "Última pergunta, vamos lá:",
+];
+const BOSS_CORRECT_LINES = [
+  "Isso mesmo! Mandou bem.",
+  "Perfeito, é exatamente isso!",
+  "Excelente resposta!",
+];
+const BOSS_WRONG_LINES = [
+  "Não foi dessa vez.",
+  "Quase! Deixa eu te explicar:",
+  "Essa é traiçoeira, mas vamos entender:",
+];
+const TYPE_SPEED_MS = 60;
 const INFO_TYPE_SPEED_MS = 35;
 
 function pickLine(list, index) {
@@ -766,7 +992,9 @@ function startBossBattle(scene, phaseConfig, bossSprite, onComplete) {
   overlay.classList.remove("hidden");
   nameEl.textContent = ` ${phaseConfig.boss.name}`;
 
-  const questions = pickRandom(phaseConfig.boss.questions, 3).map((question) => shuffleQuestion(question));
+  const questions = pickRandom(phaseConfig.boss.questions, 3).map((question) =>
+    shuffleQuestion(question),
+  );
   let qIndex = 0;
   let battleCorrectCount = 0;
   let timeLeft = ANSWER_SECONDS;
@@ -822,8 +1050,10 @@ function startBossBattle(scene, phaseConfig, bossSprite, onComplete) {
       }
     }, TYPE_SPEED_MS);
   }
-  
-  questionEl.onclick = () => { typeState.instant = true; };
+
+  questionEl.onclick = () => {
+    typeState.instant = true;
+  };
 
   function playIntroThenQuestion(index) {
     if (isStale()) return;
@@ -867,7 +1097,7 @@ function startBossBattle(scene, phaseConfig, bossSprite, onComplete) {
       }
       const pauseModal = document.getElementById("pause-modal");
       if (pauseModal && !pauseModal.classList.contains("hidden")) return;
-      
+
       timeLeft -= 1;
       headerEl.textContent = `⏱ ${timeLeft}s`;
 
@@ -894,10 +1124,12 @@ function startBossBattle(scene, phaseConfig, bossSprite, onComplete) {
       battleCorrectCount += 1;
       const BASE_POINTS = 60;
       const MAX_SPEED_BONUS = 40;
-      const speedBonus = Math.round((timeLeft / ANSWER_SECONDS) * MAX_SPEED_BONUS);
+      const speedBonus = Math.round(
+        (timeLeft / ANSWER_SECONDS) * MAX_SPEED_BONUS,
+      );
       GameData.score += BASE_POINTS + speedBonus;
     } else {
-      GameData.lives -= 1; 
+      GameData.lives -= 1;
     }
     updateHUD();
 
@@ -1044,7 +1276,8 @@ function updateInfoBubble(scene, playerX, infoSpots, phaseId, infoIcons) {
     if (spot.once && scene.usedOnceSpots?.has(index)) return;
     const distance = Math.abs(playerX - spot.x);
     if (distance <= INFO_PROXIMITY_RADIUS && distance < nearestDist) {
-      const text = spot.textAfterBoss && scene.doorOpen ? spot.textAfterBoss : spot.text;
+      const text =
+        spot.textAfterBoss && scene.doorOpen ? spot.textAfterBoss : spot.text;
       nearest = { id: `${phaseId}_${index}`, index, spot, text };
       nearestDist = distance;
     }
@@ -1089,7 +1322,8 @@ function updateInfoBubble(scene, playerX, infoSpots, phaseId, infoIcons) {
         content.textContent = "";
     }, 220);
 
-    const staysHidden = previousSpot?.once && scene.usedOnceSpots?.has(previousIndex);
+    const staysHidden =
+      previousSpot?.once && scene.usedOnceSpots?.has(previousIndex);
     if (infoIcons?.[previousIndex] && !staysHidden) {
       infoIcons[previousIndex].setVisible(true);
     }
@@ -1103,7 +1337,8 @@ function showPhaseIntro(phaseConfig, onComplete) {
   const intro = document.getElementById("phase-intro");
   const label = document.getElementById("phase-intro-label");
   const name = document.getElementById("phase-intro-name");
-  label.textContent = phaseConfig.phaseLabel ?? `Fase ${phaseConfig.phaseNumber ?? ""}`;
+  label.textContent =
+    phaseConfig.phaseLabel ?? `Fase ${phaseConfig.phaseNumber ?? ""}`;
   name.textContent = phaseConfig.name;
   intro.classList.remove("hidden", "phase-intro-visible");
   void intro.offsetWidth;
@@ -1119,14 +1354,22 @@ function showPhaseIntro(phaseConfig, onComplete) {
 // SISTEMA DO NARRADOR ANIMADO
 // ---------------------------------------------------------
 function chamarNarrador(cena, avatarKeys, audioKey, texto, onComplete) {
-  const overlay = cena.add.rectangle(480, 270, 960, 540, 0x000000, 0.8).setOrigin(0.5).setDepth(100).setScrollFactor(0).setInteractive();
+  const overlay = cena.add
+    .rectangle(480, 270, 960, 540, 0x000000, 0.8)
+    .setOrigin(0.5)
+    .setDepth(100)
+    .setScrollFactor(0)
+    .setInteractive();
   const box = cena.add.graphics().setDepth(101).setScrollFactor(0);
   box.fillStyle(0x002b54, 1);
   box.lineStyle(4, 0xff8f00, 1);
   box.fillRoundedRect(230, 80, 500, 340, 16);
   box.strokeRoundedRect(230, 80, 500, 340, 16);
 
-  const avatar = cena.add.image(480, 190, avatarKeys.idle).setDepth(102).setScrollFactor(0);
+  const avatar = cena.add
+    .image(480, 190, avatarKeys.idle)
+    .setDepth(102)
+    .setScrollFactor(0);
   const targetHeight = 165;
   const sourceImage = cena.textures.get(avatarKeys.idle).getSourceImage();
   if (sourceImage && sourceImage.height > 0) {
@@ -1134,13 +1377,28 @@ function chamarNarrador(cena, avatarKeys, audioKey, texto, onComplete) {
     avatar.setScale(scale);
   }
 
-  const messageText = cena.add.text(480, 295, "", {
-    fontSize: "20px", fontFamily: "Arial", color: "#F4F7F9", align: "center", wordWrap: { width: 420 },
-  }).setOrigin(0.5, 0).setDepth(102).setScrollFactor(0);
+  const messageText = cena.add
+    .text(480, 295, "", {
+      fontSize: "20px",
+      fontFamily: "Arial",
+      color: "#F4F7F9",
+      align: "center",
+      wordWrap: { width: 420 },
+    })
+    .setOrigin(0.5, 0)
+    .setDepth(102)
+    .setScrollFactor(0);
 
-  const hintText = cena.add.text(480, 385, "Clique para continuar ➡", {
-    fontSize: "16px", fontStyle: "italic", color: "#FFB347",
-  }).setOrigin(0.5, 0).setDepth(102).setScrollFactor(0).setAlpha(0);
+  const hintText = cena.add
+    .text(480, 385, "Clique para continuar ➡", {
+      fontSize: "16px",
+      fontStyle: "italic",
+      color: "#FFB347",
+    })
+    .setOrigin(0.5, 0)
+    .setDepth(102)
+    .setScrollFactor(0)
+    .setAlpha(0);
 
   let voice;
   if (audioKey && cena.cache.audio.exists(audioKey)) {
@@ -1150,10 +1408,18 @@ function chamarNarrador(cena, avatarKeys, audioKey, texto, onComplete) {
 
   const isMultiFrame = avatarKeys.idle === "narrador_idle";
   const talkSequence = isMultiFrame
-    ? ["narrador_idle", "narrador_talk_1", "narrador_talk_2", "narrador_talk_2", "narrador_talk_1"]
+    ? [
+        "narrador_idle",
+        "narrador_talk_1",
+        "narrador_talk_2",
+        "narrador_talk_2",
+        "narrador_talk_1",
+      ]
     : [avatarKeys.idle, avatarKeys.talk || avatarKeys.idle];
 
-  const blinkSequence = isMultiFrame ? ["narrador_blink_1", "narrador_blink_4", "narrador_blink_1"] : null;
+  const blinkSequence = isMultiFrame
+    ? ["narrador_blink_1", "narrador_blink_4", "narrador_blink_1"]
+    : null;
 
   let isTalking = true;
   let talkIndex = 0;
@@ -1197,7 +1463,7 @@ function chamarNarrador(cena, avatarKeys, audioKey, texto, onComplete) {
     if (charIndex >= textoSeguro.length) {
       clearInterval(typeInterval);
       isTyping = false;
-      isTalking = false; 
+      isTalking = false;
       avatar.setTexture(avatarKeys.idle);
       hintText.setAlpha(1);
     }
@@ -1208,7 +1474,7 @@ function chamarNarrador(cena, avatarKeys, audioKey, texto, onComplete) {
       clearInterval(typeInterval);
       messageText.setText(textoSeguro);
       isTyping = false;
-      isTalking = false; 
+      isTalking = false;
       avatar.setTexture(avatarKeys.idle);
       hintText.setAlpha(1);
     } else {
@@ -1242,15 +1508,30 @@ class PhaseScene extends Phaser.Scene {
 
     // Carregamento do Narrador transferido da antiga MapScene
     if (!this.textures.exists("narrador_idle")) {
-      this.load.image("narrador_idle", "assets/characters/narrador_blink_1.png");
-      this.load.image("narrador_talk_1", "assets/characters/narrador_talk_1.png");
-      this.load.image("narrador_talk_2", "assets/characters/narrador_talk_2.png");
-      this.load.image("narrador_blink_1", "assets/characters/narrador_blink_1.png");
-      this.load.image("narrador_blink_4", "assets/characters/narrador_blink_4.png");
+      this.load.image(
+        "narrador_idle",
+        "assets/characters/narrador_blink_1.png",
+      );
+      this.load.image(
+        "narrador_talk_1",
+        "assets/characters/narrador_talk_1.png",
+      );
+      this.load.image(
+        "narrador_talk_2",
+        "assets/characters/narrador_talk_2.png",
+      );
+      this.load.image(
+        "narrador_blink_1",
+        "assets/characters/narrador_blink_1.png",
+      );
+      this.load.image(
+        "narrador_blink_4",
+        "assets/characters/narrador_blink_4.png",
+      );
     }
 
     const cfg = this.config;
-    const bgKey = `bg_${cfg.id}`; 
+    const bgKey = `bg_${cfg.id}`;
     if (!this.textures.exists(bgKey)) {
       this.load.image(bgKey, `assets/backgrounds/${cfg.bg}`);
     }
@@ -1262,26 +1543,38 @@ class PhaseScene extends Phaser.Scene {
       const blinkKey = `boss_${cfg.id}_blink`;
       if (!this.textures.exists(idleKey)) {
         this.load.image(idleKey, `assets/bosses/${cfg.boss.portrait.idle}`);
-        if (cfg.boss.portrait.talk) this.load.image(talkKey, `assets/bosses/${cfg.boss.portrait.talk}`);
-        if (cfg.boss.portrait.blink) this.load.image(blinkKey, `assets/bosses/${cfg.boss.portrait.blink}`);
+        if (cfg.boss.portrait.talk)
+          this.load.image(talkKey, `assets/bosses/${cfg.boss.portrait.talk}`);
+        if (cfg.boss.portrait.blink)
+          this.load.image(blinkKey, `assets/bosses/${cfg.boss.portrait.blink}`);
       }
     }
 
     const charId = GameData.selectedCharacter;
     if (!this.textures.exists(`char_${charId}_idle`)) {
-      this.load.spritesheet(`char_${charId}_idle`, `assets/characters/${charId}/Idle.png`, {
-        frameWidth: CHARACTER_FRAME_SIZE, frameHeight: CHARACTER_FRAME_SIZE,
-      });
-      this.load.spritesheet(`char_${charId}_walk`, `assets/characters/${charId}/Walk.png`, {
-        frameWidth: CHARACTER_FRAME_SIZE, frameHeight: CHARACTER_FRAME_SIZE,
-      });
+      this.load.spritesheet(
+        `char_${charId}_idle`,
+        `assets/characters/${charId}/Idle.png`,
+        {
+          frameWidth: CHARACTER_FRAME_SIZE,
+          frameHeight: CHARACTER_FRAME_SIZE,
+        },
+      );
+      this.load.spritesheet(
+        `char_${charId}_walk`,
+        `assets/characters/${charId}/Walk.png`,
+        {
+          frameWidth: CHARACTER_FRAME_SIZE,
+          frameHeight: CHARACTER_FRAME_SIZE,
+        },
+      );
     }
   }
 
   create() {
     document.getElementById("hud").style.display = "flex";
     document.getElementById("touch-controls").style.display = "flex";
-    
+
     activeInfoId = null;
     clearInterval(infoTypeInterval);
     infoTypeInterval = null;
@@ -1297,14 +1590,23 @@ class PhaseScene extends Phaser.Scene {
 
     const bgKey = `bg_${cfg.id}`;
     const bgTex = this.textures.get(bgKey).getSourceImage();
-    const bgScale = 540 / bgTex.height; 
-    const bg = this.add.tileSprite(cfg.levelWidth / 2, 270, cfg.levelWidth, 540, bgKey);
+    const bgScale = 540 / bgTex.height;
+    const bg = this.add.tileSprite(
+      cfg.levelWidth / 2,
+      270,
+      cfg.levelWidth,
+      540,
+      bgKey,
+    );
     bg.setTileScale(bgScale, bgScale);
     bg.setScrollFactor(1);
 
     this.groundGroup = this.physics.add.staticGroup();
     for (let x = 0; x < cfg.levelWidth; x += 64) {
-      this.groundGroup.create(x + 32, 500, "ground").setVisible(false).refreshBody();
+      this.groundGroup
+        .create(x + 32, 500, "ground")
+        .setVisible(false)
+        .refreshBody();
     }
 
     const charId = GameData.selectedCharacter;
@@ -1313,15 +1615,23 @@ class PhaseScene extends Phaser.Scene {
     if (!this.anims.exists(`${charId}_idle`)) {
       this.anims.create({
         key: `${charId}_idle`,
-        frames: this.anims.generateFrameNumbers(`char_${charId}_idle`, { start: 0, end: charDef.idleFrames - 1 }),
-        frameRate: 6, repeat: -1,
+        frames: this.anims.generateFrameNumbers(`char_${charId}_idle`, {
+          start: 0,
+          end: charDef.idleFrames - 1,
+        }),
+        frameRate: 6,
+        repeat: -1,
       });
     }
     if (!this.anims.exists(`${charId}_walk`)) {
       this.anims.create({
         key: `${charId}_walk`,
-        frames: this.anims.generateFrameNumbers(`char_${charId}_walk`, { start: 0, end: charDef.walkFrames - 1 }),
-        frameRate: 12, repeat: -1,
+        frames: this.anims.generateFrameNumbers(`char_${charId}_walk`, {
+          start: 0,
+          end: charDef.walkFrames - 1,
+        }),
+        frameRate: 12,
+        repeat: -1,
       });
     }
 
@@ -1330,7 +1640,12 @@ class PhaseScene extends Phaser.Scene {
     const startX = cfg.startX ?? 80;
     const startDirection = cfg.startDirection ?? "right";
 
-    this.player = this.physics.add.sprite(startX, groundY, `char_${charId}_idle`, 0);
+    this.player = this.physics.add.sprite(
+      startX,
+      groundY,
+      `char_${charId}_idle`,
+      0,
+    );
     this.player.setOrigin(0.5, 1);
     this.player.body.setAllowGravity(false);
     this.player.setSize(CHARACTER_BODY.width, CHARACTER_BODY.height);
@@ -1344,12 +1659,21 @@ class PhaseScene extends Phaser.Scene {
     this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
 
     this.infoIcons = [];
-    this.usedOnceSpots = new Set(); 
+    this.usedOnceSpots = new Set();
 
     cfg.infoSpots.forEach((spot, index) => {
-      const icon = this.add.image(spot.x, spot.y ?? 300, "posterTex").setOrigin(0.5, 1).setDepth(20).setAlpha(0.75);
+      const icon = this.add
+        .image(spot.x, spot.y ?? 300, "posterTex")
+        .setOrigin(0.5, 1)
+        .setDepth(20)
+        .setAlpha(0.75);
       this.tweens.add({
-        targets: icon, y: icon.y - 4, duration: 650, yoyo: true, repeat: -1, ease: "Sine.easeInOut",
+        targets: icon,
+        y: icon.y - 4,
+        duration: 650,
+        yoyo: true,
+        repeat: -1,
+        ease: "Sine.easeInOut",
       });
       this.infoIcons.push(icon);
     });
@@ -1371,22 +1695,46 @@ class PhaseScene extends Phaser.Scene {
         const flip = cfg.boss.portraitFlip === true;
 
         const idleTex = this.textures.get(idleKey).getSourceImage();
-        const talkTex = this.textures.exists(talkKey) ? this.textures.get(talkKey).getSourceImage() : idleTex;
+        const talkTex = this.textures.exists(talkKey)
+          ? this.textures.get(talkKey).getSourceImage()
+          : idleTex;
         const hasBlink = this.textures.exists(blinkKey);
-        const blinkTex = hasBlink ? this.textures.get(blinkKey).getSourceImage() : idleTex;
+        const blinkTex = hasBlink
+          ? this.textures.get(blinkKey).getSourceImage()
+          : idleTex;
 
         const idleBaseScale = portraitHeight / idleTex.height;
         const talkBaseScale = portraitHeight / talkTex.height;
         const blinkBaseScale = portraitHeight / blinkTex.height;
 
-        this.bossIdleSprite = this.add.image(bossX, bossY, idleKey).setOrigin(0.5, 1).setScale(idleBaseScale).setFlipX(flip);
-        this.bossTalkSprite = this.add.image(bossX, bossY, talkKey).setOrigin(0.5, 1).setScale(talkBaseScale).setFlipX(flip).setVisible(false);
-        this.bossBlinkSprite = this.add.image(bossX, bossY, hasBlink ? blinkKey : idleKey).setOrigin(0.5, 1).setScale(blinkBaseScale).setFlipX(flip).setVisible(false);
+        this.bossIdleSprite = this.add
+          .image(bossX, bossY, idleKey)
+          .setOrigin(0.5, 1)
+          .setScale(idleBaseScale)
+          .setFlipX(flip);
+        this.bossTalkSprite = this.add
+          .image(bossX, bossY, talkKey)
+          .setOrigin(0.5, 1)
+          .setScale(talkBaseScale)
+          .setFlipX(flip)
+          .setVisible(false);
+        this.bossBlinkSprite = this.add
+          .image(bossX, bossY, hasBlink ? blinkKey : idleKey)
+          .setOrigin(0.5, 1)
+          .setScale(blinkBaseScale)
+          .setFlipX(flip)
+          .setVisible(false);
         this.bossSprite = this.bossIdleSprite;
 
         const addBreathingTween = (targetSprite, baseScale) => {
           this.tweens.add({
-            targets: targetSprite, scaleY: baseScale * 1.02, scaleX: baseScale * 0.995, duration: 700, yoyo: true, repeat: -1, ease: "Sine.easeInOut",
+            targets: targetSprite,
+            scaleY: baseScale * 1.02,
+            scaleX: baseScale * 0.995,
+            duration: 700,
+            yoyo: true,
+            repeat: -1,
+            ease: "Sine.easeInOut",
           });
         };
         addBreathingTween(this.bossIdleSprite, idleBaseScale);
@@ -1409,7 +1757,7 @@ class PhaseScene extends Phaser.Scene {
 
         this.startBossTalkAnim = () => {
           if (this.bossTalkInterval) return;
-          this.bossBlinkSprite.setVisible(false); 
+          this.bossBlinkSprite.setVisible(false);
           this.bossTalkInterval = setInterval(() => {
             if (GameData.menuPaused) return;
             const showTalk = !this.bossTalkSprite.visible;
@@ -1425,7 +1773,9 @@ class PhaseScene extends Phaser.Scene {
           this.bossIdleSprite.setVisible(true);
         };
       } else {
-        this.bossSprite = this.add.image(bossX, bossY, "bossTex").setOrigin(0.5, 1);
+        this.bossSprite = this.add
+          .image(bossX, bossY, "bossTex")
+          .setOrigin(0.5, 1);
       }
 
       this.bossZone = this.add.zone(bossX, bossY, 70, 100);
@@ -1434,7 +1784,9 @@ class PhaseScene extends Phaser.Scene {
         if (!this.bossTriggered && !GameData.paused) {
           this.bossTriggered = true;
           this.player.setVelocity(0, 0);
-          startBossBattle(this, cfg, this.bossSprite, () => this.onBossDefeated());
+          startBossBattle(this, cfg, this.bossSprite, () =>
+            this.onBossDefeated(),
+          );
         }
       });
     }
@@ -1443,13 +1795,38 @@ class PhaseScene extends Phaser.Scene {
       const exitY = groundY;
       const arrowPointsLeft = (cfg.exitDirection || "forward") === "backward";
       const exitStartsOpen = cfg.exitInitiallyOpen === true;
-      
-      this.doorGlow = this.add.circle(doorX, exitY - 90, 46, THEME.accent, 0.25).setVisible(exitStartsOpen);
-      this.door = this.add.text(doorX, exitY - 90, "➜", { fontSize: "64px", fontStyle: "bold", color: "#f2a900" }).setOrigin(0.5).setFlipX(arrowPointsLeft).setVisible(exitStartsOpen);
-      
-      this.tweens.add({ targets: this.doorGlow, scale: { from: 0.85, to: 1.15 }, alpha: { from: 0.15, to: 0.35 }, duration: 900, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
-      this.tweens.add({ targets: this.door, x: doorX + (arrowPointsLeft ? -12 : 12), duration: 650, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
-      
+
+      this.doorGlow = this.add
+        .circle(doorX, exitY - 90, 46, THEME.accent, 0.25)
+        .setVisible(exitStartsOpen);
+      this.door = this.add
+        .text(doorX, exitY - 90, "➜", {
+          fontSize: "64px",
+          fontStyle: "bold",
+          color: "#f2a900",
+        })
+        .setOrigin(0.5)
+        .setFlipX(arrowPointsLeft)
+        .setVisible(exitStartsOpen);
+
+      this.tweens.add({
+        targets: this.doorGlow,
+        scale: { from: 0.85, to: 1.15 },
+        alpha: { from: 0.15, to: 0.35 },
+        duration: 900,
+        yoyo: true,
+        repeat: -1,
+        ease: "Sine.easeInOut",
+      });
+      this.tweens.add({
+        targets: this.door,
+        x: doorX + (arrowPointsLeft ? -12 : 12),
+        duration: 650,
+        yoyo: true,
+        repeat: -1,
+        ease: "Sine.easeInOut",
+      });
+
       this.doorX = doorX;
       this.doorTriggerRadius = 70;
       this.doorOpen = exitStartsOpen;
@@ -1541,44 +1918,77 @@ class PhaseScene extends Phaser.Scene {
                             this.doorOpen = true;
                             this.door.setVisible(true);
                             this.doorGlow.setVisible(true);
-                          }
+                          },
                         );
-                      }
+                      },
                     );
-                  }
+                  },
                 );
-              }
+              },
             );
-          }
+          },
         );
       } else if (cfg.id === "fase2") {
         GameData.paused = true;
         this.physics.pause();
         this.inputManager.setEnabled(false);
-        chamarNarrador(this, { idle: "narrador_idle", talkOpen: "narrador_talk_open", talkMid: "narrador_talk_mid", blink: "narrador_blink" }, null, "Você sai da padaria frustrado. O prejuízo no caixa não sai da sua cabeça... Dizem que os comerciantes mais antigos da rua costumam passar por isso. É hora de caminhar e buscar respostas!", () => {
-          GameData.paused = false;
-          this.physics.resume();
-          this.inputManager.setEnabled(true);
-        });
+        chamarNarrador(
+          this,
+          {
+            idle: "narrador_idle",
+            talkOpen: "narrador_talk_open",
+            talkMid: "narrador_talk_mid",
+            blink: "narrador_blink",
+          },
+          null,
+          "Você sai da padaria frustrado. O prejuízo no caixa não sai da sua cabeça... Dizem que os comerciantes mais antigos da rua costumam passar por isso. É hora de caminhar e buscar respostas!",
+          () => {
+            GameData.paused = false;
+            this.physics.resume();
+            this.inputManager.setEnabled(true);
+          },
+        );
       } else if (cfg.id === "fase3") {
         GameData.paused = true;
         this.physics.pause();
         this.inputManager.setEnabled(false);
-        chamarNarrador(this, { idle: "narrador_idle", talkOpen: "narrador_talk_open", talkMid: "narrador_talk_mid", blink: "narrador_blink" }, null, "Seguindo o conselho do vizinho, você decide buscar ajuda profissional. A caminhada termina em frente ao escritório do Sebrae.", () => {
-          GameData.paused = false;
-          this.physics.resume();
-          this.inputManager.setEnabled(true);
-        });
+        chamarNarrador(
+          this,
+          {
+            idle: "narrador_idle",
+            talkOpen: "narrador_talk_open",
+            talkMid: "narrador_talk_mid",
+            blink: "narrador_blink",
+          },
+          null,
+          "Seguindo o conselho do vizinho, você decide buscar ajuda profissional. A caminhada termina em frente ao escritório do Sebrae.",
+          () => {
+            GameData.paused = false;
+            this.physics.resume();
+            this.inputManager.setEnabled(true);
+          },
+        );
       } else if (cfg.id === "fase4") {
         // Narrador da nova Fase 4 (Ato Final)
         GameData.paused = true;
         this.physics.pause();
         this.inputManager.setEnabled(false);
-        chamarNarrador(this, { idle: "narrador_idle", talkOpen: "narrador_talk_open", talkMid: "narrador_talk_mid", blink: "narrador_blink" }, null, "Você finalmente entra no escritório do Sebrae. O ambiente é acolhedor e profissional. Agora é a hora de consolidar tudo o que você aprendeu com o Finanças na Mão!", () => {
-          GameData.paused = false;
-          this.physics.resume();
-          this.inputManager.setEnabled(true);
-        });
+        chamarNarrador(
+          this,
+          {
+            idle: "narrador_idle",
+            talkOpen: "narrador_talk_open",
+            talkMid: "narrador_talk_mid",
+            blink: "narrador_blink",
+          },
+          null,
+          "Agora é hora de aprender sobre uma ferramenta do Sebrae que te fará ter os números da sua empresa na palma da mão!",
+          () => {
+            GameData.paused = false;
+            this.physics.resume();
+            this.inputManager.setEnabled(true);
+          },
+        );
       } else {
         this.inputManager.setEnabled(true);
       }
@@ -1612,7 +2022,13 @@ class PhaseScene extends Phaser.Scene {
   }
 
   update() {
-    updateInfoBubble(this, this.player.x, this.infoSpots, this.config.id, this.infoIcons);
+    updateInfoBubble(
+      this,
+      this.player.x,
+      this.infoSpots,
+      this.config.id,
+      this.infoIcons,
+    );
 
     if (GameData.paused) {
       this.player.setVelocityX(0);
@@ -1622,7 +2038,7 @@ class PhaseScene extends Phaser.Scene {
       }
       return;
     }
-    
+
     if (this.doorOpen && !this.phaseTransitioning && this.doorX !== undefined) {
       if (Math.abs(this.player.x - this.doorX) < this.doorTriggerRadius) {
         this.phaseTransitioning = true;
@@ -1669,13 +2085,13 @@ const config = {
   parent: "game-container",
   width: 960,
   height: 540,
-  pixelArt: true, 
+  pixelArt: true,
   backgroundColor: "#000000",
   physics: {
     default: "arcade",
     arcade: { gravity: { y: 1200 }, debug: false },
   },
-  scene: [], 
+  scene: [],
 };
 
 const game = new Phaser.Game(config);
@@ -1694,24 +2110,31 @@ game.scene.add("PhaseScene", PhaseScene, false);
 // MENU INICIAL
 // ---------------------------------------------------------
 function showPanel(id) {
-  document.querySelectorAll(".menu-panel").forEach((p) => p.classList.add("hidden"));
+  document
+    .querySelectorAll(".menu-panel")
+    .forEach((p) => p.classList.add("hidden"));
   document.getElementById(id).classList.remove("hidden");
   if (id === "panel-ranking") renderRankingInto("ranking-list-menu");
 }
 
-document.querySelectorAll(".menu-btn[data-target], .back-btn[data-target]").forEach((btn) => {
-  btn.addEventListener("click", () => showPanel(btn.dataset.target));
-});
+document
+  .querySelectorAll(".menu-btn[data-target], .back-btn[data-target]")
+  .forEach((btn) => {
+    btn.addEventListener("click", () => showPanel(btn.dataset.target));
+  });
 
 const nameInput = document.getElementById("player-name-start");
 const nameWarning = document.getElementById("name-warning");
 
 document.querySelectorAll(".character-option").forEach((btn) => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll(".character-option").forEach((b) => b.classList.remove("selected"));
+    document
+      .querySelectorAll(".character-option")
+      .forEach((b) => b.classList.remove("selected"));
     btn.classList.add("selected");
     GameData.selectedCharacter = btn.dataset.character;
-    document.getElementById("hud-character-icon").src = `assets/thumbnails/${GameData.selectedCharacter}.png`;
+    document.getElementById("hud-character-icon").src =
+      `assets/thumbnails/${GameData.selectedCharacter}.png`;
   });
 });
 
@@ -1723,9 +2146,12 @@ document.getElementById("confirm-name-btn").addEventListener("click", () => {
     nameInput.focus();
     return;
   }
-  const nameTaken = loadRanking().some((r) => r.name.trim().toLowerCase() === name.toLowerCase());
+  const nameTaken = loadRanking().some(
+    (r) => r.name.trim().toLowerCase() === name.toLowerCase(),
+  );
   if (nameTaken) {
-    nameWarning.textContent = "Esse nome já está no ranking! Escolha outro (ex: adicione um sobrenome).";
+    nameWarning.textContent =
+      "Esse nome já está no ranking! Escolha outro (ex: adicione um sobrenome).";
     nameWarning.classList.remove("hidden");
     nameInput.focus();
     return;
@@ -1737,7 +2163,7 @@ document.getElementById("confirm-name-btn").addEventListener("click", () => {
   updateHUD();
   document.getElementById("touch-controls").style.display = "flex";
   document.getElementById("start-overlay").classList.add("hidden");
-  
+
   // Agora inicializa direto na Fase 1 em vez do Mapa
   game.scene.start("PhaseScene", { phaseIndex: 0 });
 });
@@ -1835,7 +2261,7 @@ if (restartBtn) {
         scene.input.keyboard.clearCaptures();
       }
     });
-    
+
     // Para totalmente a PhaseScene antes de voltar ao menu
     game.scene.stop("PhaseScene");
 

@@ -4,14 +4,14 @@
    1. IDENTIDADE VISUAL — PALETA CENTRALIZADA
    ========================================================= */
 :root {
-  --color-primary: #1a4329;       /* Verde-escuro financeiro */
-  --color-primary-dark: #0d2415;  /* Verde muito escuro (fundos) */
-  --color-accent: #f2a900;        /* Dourado principal */
-  --color-accent-light: #ffe27a;  /* Dourado claro */
-  --color-cream: #f5f0e6;         /* Creme (textos e painéis claros) */
-  --color-danger: #c0392b;        /* Vermelho (erro) */
-  --color-success: #2e7d32;       /* Verde (acerto) */
-  --color-text: #f5f0e6;          /* Cor padrão de texto */
+  --color-primary: #1a4329; /* Verde-escuro financeiro */
+  --color-primary-dark: #0d2415; /* Verde muito escuro (fundos) */
+  --color-accent: #f2a900; /* Dourado principal */
+  --color-accent-light: #ffe27a; /* Dourado claro */
+  --color-cream: #f5f0e6; /* Creme (textos e painéis claros) */
+  --color-danger: #c0392b; /* Vermelho (erro) */
+  --color-success: #2e7d32; /* Verde (acerto) */
+  --color-text: #f5f0e6; /* Cor padrão de texto */
 }
 
 * {
@@ -298,7 +298,8 @@ button:hover {
     opacity: 0;
     transform: translate(-50%, -12px);
   }
-  15%, 75% {
+  15%,
+  75% {
     opacity: 1;
     transform: translate(-50%, 0);
   }
