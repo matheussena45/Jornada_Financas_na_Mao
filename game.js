@@ -1,9 +1,9 @@
 // =========================================================
-// Jornada Sebrae — protótipo jogável (Fluxo Linear Direto)
+// Jornada Finanças na Mão — protótipo jogável (Fluxo Linear Direto)
 // =========================================================
 
 const RANKING_KEY = "financas_na_mao_v1";
-const MAX_LIVES = 1;
+const MAX_LIVES = 6;
 const INFO_PROXIMITY_RADIUS = 90;
 const ANSWER_SECONDS = 15;
 const ONCE_BUBBLE_MIN_MS = 4500;
@@ -110,7 +110,7 @@ function resetGameData() {
 // CONTEÚDO DAS FASES
 // ---------------------------------------------------------
 const PHASES = [
-  {
+  /*{
     id: "fase1",
     name: "Padaria do Bairro",
     startX: 550,
@@ -160,18 +160,18 @@ const PHASES = [
     characterScale: 2.0,
     infoSpots: [
       {
-        x: 400,
-        y: 280,
+        x: 675,
+        y: 320,
         text: "Muitos negócios quebram porque misturam o dinheiro do dono com o da empresa. O caixa do comércio não é sua carteira pessoal!",
       },
       {
-        x: 950,
-        y: 280,
+        x: 1045,
+        y: 320,
         text: "Despesa fixa (como aluguel) você paga vendendo ou não. Já a variável (como embalagens) só aumenta quando suas vendas aumentam.",
       },
       {
-        x: 1400,
-        y: 280,
+        x: 1355,
+        y: 320,
         text: "Cuidado com a ilusão do Faturamento: ver muito dinheiro entrando não significa lucro. Lucro é apenas o que sobra depois de pagar as contas.",
       },
     ],
@@ -354,18 +354,18 @@ const PHASES = [
     characterScale: 2.4,
     infoSpots: [
       {
-        x: 400,
-        y: 280,
+        x: 440,
+        y: 330,
         text: "Capital de Giro é o oxigênio da empresa. É o dinheiro necessário para manter as portas abertas enquanto os pagamentos dos clientes não caem na conta.",
       },
       {
-        x: 950,
-        y: 280,
+        x: 755,
+        y: 330,
         text: "Cuidado com o 'Descaminho do Desconto': baixar o preço sem calcular a margem de lucro pode fazer você pagar para trabalhar.",
       },
       {
-        x: 1400,
-        y: 280,
+        x: 1075,
+        y: 340,
         text: "Vender a prazo e comprar à vista é uma armadilha perigosa. O descompasso entre pagar e receber pode secar o caixa rapidamente.",
       },
     ],
@@ -523,35 +523,79 @@ const PHASES = [
   {
     id: "fase4",
     name: "Consultoria Final",
-    startX: 80,
+    startX: 140,
     startDirection: "right",
-    hasBoss: true,
-    exitInitiallyOpen: false,
-    showExitArrow: false, // Fase final encerra direto no boss
+    hasBoss: false,
+    exitInitiallyOpen: true,
+    showExitArrow: true,
     phaseNumber: 4,
     phaseLabel: "Ato Final",
     skyColor: 0x18233d,
     groundColor: 0x2c3350,
     decorColor: 0x22304f,
+    levelWidth: 1990,
+    bg: "sebrae_bg.jpg",
+    doorX: 1770,
+    groundY: 495,
+    characterScale: 3.6,
+    infoSpots: [
+      {
+        x: 400,
+        y: 210,
+        text: "Olá, Seja Bem vindo ao Sebrae Alto Oeste!",
+      },
+      {
+        x: 960,
+        y: 235,
+        text: "Vender mais nem sempre aumenta o lucro. A Margem de Contribuição é vital: é o que sobra da venda, após os custos variáveis, para pagar as despesas fixas.",
+      },
+      {
+        x: 1320,
+        y: 235,
+        text: "Projeção é tudo. Se você tem 8 mil a receber e 12 mil a pagar no mês, terá uma necessidade de caixa de 4 mil. Antecipe-se com o Fluxo de Caixa!",
+      },
+    ],
+  },*/
+  {
+    id: "fase5",
+    name: "Sala do Chefe",
+    startX: 80,
+    startDirection: "right",
+    hasBoss: true,
+    exitInitiallyOpen: false,
+    showExitArrow: false,
+    phaseNumber: 5,
+    phaseLabel: "Ato Final",
+    skyColor: 0x18233d,
+    groundColor: 0x2c3350,
+    decorColor: 0x22304f,
     levelWidth: 1200,
-    bg: "test3.jpg", // Substituir pelo background final
-    bossX: 950,
-    bossY: 485,
-    doorX: 950,
-    groundY: 485,
-    characterScale: 2.4,
+    bg: "sala_chefe_bg.jpg",
+    bossX: 700,
+    bossY: 515,
+    doorX: 1770,
+    groundY: 495,
+    characterScale: 4.0,
     infoSpots: [],
     boss: {
       name: "Consultor Chefe",
       portrait: {
-        idle: "boss3_idle.png", // Substituir depois
+        idle: "boss3_idle.png",
         talk: "boss3_talk.png",
         blink: "boss3_blink.png",
       },
-      portraitHeight: 200,
-      dialogueBottom: 240,
+      portraitHeight: 330,
+      dialogueBottom: 330,
       greeting:
-        "Bem-vindo ao Sebrae! Chegou a hora de provar que você está pronto para utilizar o Finanças na Mão de forma definitiva.",
+        "Bem-vindo ao Sebrae, Eu me chamo Franciel Monte! Chegou a hora de provar que você está pronto para utilizar o Finanças na Mão de forma definitiva.",
+      merchanText:
+        "Agora que avaliamos sua situação, está na hora de automatizar seu controle. Aponte a câmera e conheça o Finanças na Mão antes de finalizarmos:",
+      qrCode: {
+        image: "assets/images/qrcode_financas_na_mao.png",
+        duration: 25,
+        title: "Automatize sua Gestão!",
+        text: "Aponte a câmera e conheça a solução Finanças na Mão do Sebrae:",
+      },
       introLines: [
         "Vamos ao primeiro teste avançado:",
         "Muito bem, vamos continuar:",
@@ -574,12 +618,125 @@ const PHASES = [
         0: "Foi bom você ter vindo ao Sebrae. Vamos precisar recomeçar do zero sua gestão!",
       },
       questions: [
-        // Adicione as perguntas da Fase 4 aqui no mesmo formato
         {
-          q: "Pergunta placeholder Fase 4?",
-          options: ["Opção 1", "Opção 2", "Opção 3", "Opção 4"],
+          q: "A DRE (Demonstração do Resultado do Exercício) ajuda principalmente a saber:",
+          options: [
+            "Se a empresa teve lucro ou prejuízo",
+            "Quantos clientes compraram",
+            "Quanto existe no estoque",
+            "Qual funcionário vendeu mais",
+          ],
           correct: 0,
-          explanation: "Explicação.",
+          explanation:
+            "A DRE confronta todas as receitas, custos e despesas do período para mostrar o resultado financeiro líquido exato do negócio.",
+        },
+        {
+          q: "Você faturou R$ 30 mil no mês. Quanto sua empresa realmente ganhou?",
+          options: [
+            "R$ 30 mil",
+            "O saldo que ficou na conta",
+            "Só é possível saber após considerar custos e despesas",
+            "Tudo que foi recebido à vista",
+          ],
+          correct: 2,
+          explanation:
+            "Faturamento é apenas o volume de dinheiro que entrou. O ganho real (lucro) é o que sobra após pagar todas as obrigações.",
+        },
+        {
+          q: "Você olha o saldo da conta para saber se a empresa está indo bem. Isso é suficiente?",
+          options: [
+            "Sim, demonstra saúde financeira",
+            "Sim, se não houver dívidas passadas",
+            "Não, é preciso acompanhar receitas, custos e despesas",
+            "Sim, mas apenas para o MEI",
+          ],
+          correct: 2,
+          explanation:
+            "Ter saldo em conta hoje não garante rentabilidade. Você pode ter dívidas futuras pesadas ou estar consumindo seu capital de giro sem perceber.",
+        },
+        {
+          q: "O caixa está positivo hoje, mas há muitas contas vencendo nos próximos dias. Qual informação é mais importante?",
+          options: [
+            "O saldo atual apenas",
+            "A projeção do fluxo de caixa",
+            "A quantidade de seguidores nas redes",
+            "O faturamento do ano passado",
+          ],
+          correct: 1,
+          explanation:
+            "A projeção do fluxo de caixa permite visualizar o futuro financeiro em curto e médio prazo, evitando surpresas quando as contas vencerem.",
+        },
+        {
+          q: "O que é ticket médio?",
+          options: [
+            "O total de vendas do mês",
+            "O valor médio gasto por cliente em uma compra",
+            "O lucro médio da empresa",
+            "O preço do produto mais vendido",
+          ],
+          correct: 1,
+          explanation:
+            "Conhecer o ticket médio ajuda a planejar estratégias para fazer com que cada cliente consuma mais a cada visita à sua empresa.",
+        },
+        {
+          q: "Sua empresa aumentou o faturamento, mas o lucro caiu. Isso é possível?",
+          options: [
+            "Não, faturamento maior é igual a lucro maior",
+            "Sim, se custos e despesas crescerem mais que as receitas",
+            "Apenas quando as vendas são pagas à vista",
+            "Somente quando a empresa pega empréstimos",
+          ],
+          correct: 1,
+          explanation:
+            "Vender mais exige estrutura. Se os custos operacionais dispararem acima do ganho em escala, a margem encolhe e o lucro cai.",
+        },
+        {
+          q: "Sua DRE mostra lucro, mas falta dinheiro no caixa. Uma possível causa é:",
+          options: [
+            "Muitas vendas a prazo ainda não recebidas",
+            "Ter uma conta bancária de Pessoa Jurídica",
+            "Controlar muito bem as despesas fixas",
+            "Ter produtos em promoção no estoque",
+          ],
+          correct: 0,
+          explanation:
+            "A DRE registra a venda no ato (lucro no papel). Porém, vender a prazo significa que o dinheiro demora a entrar no caixa, causando falta de liquidez.",
+        },
+        {
+          q: "Dois produtos têm o mesmo preço de venda, mas custos diferentes. Eles geram a mesma margem?",
+          options: [
+            "Sim, porque o preço para o cliente é igual",
+            "Não. O produto com menor custo tende a gerar maior margem",
+            "Sim, se forem vendidos e entregues no mesmo dia",
+            "Depende exclusivamente do faturamento geral",
+          ],
+          correct: 1,
+          explanation:
+            "A margem de lucro é a diferença entre o preço praticado e os custos. Logo, custos menores com preços iguais resultam em margens maiores.",
+        },
+        {
+          q: "A empresa tem R$ 8 mil para receber e R$ 12 mil para pagar no mesmo período. O que isso indica?",
+          options: [
+            "Uma sobra de caixa de R$ 4 mil",
+            "Uma necessidade de caixa de R$ 4 mil",
+            "Um lucro de R$ 20 mil",
+            "Um faturamento de R$ 12 mil",
+          ],
+          correct: 1,
+          explanation:
+            "As saídas superam as entradas. Será necessário injetar R$ 4 mil de capital de giro ou antecipar recebíveis para não ficar no vermelho.",
+        },
+        {
+          q: "Qual indicador mostra quanto sobra das vendas após os custos e despesas variáveis para ajudar a pagar as despesas fixas?",
+          options: [
+            "Faturamento Bruto",
+            "Ticket Médio",
+            "Margem de Contribuição",
+            "Saldo Bancário",
+          ],
+          correct: 2,
+          explanation:
+            "A margem de contribuição é o valor vital que cada unidade vendida contribui para pagar aluguel, salários e gerar lucro para a empresa.",
         },
       ],
     },
@@ -864,7 +1021,7 @@ function buildAllTextures(scene) {
 // TELA DE FIM DE JOGO
 // ---------------------------------------------------------
 function endGame(won) {
-  if (GameData.hasEnded) return; 
+  if (GameData.hasEnded) return;
   GameData.hasEnded = true;
 
   // Apenas silencia a música de fundo imediatamente
@@ -877,7 +1034,6 @@ function endGame(won) {
 
   // Esta função só será chamada DEPOIS do QR Code (se houver)
   const showGameOverScreen = () => {
-    
     // ÁUDIOS E EFEITOS AGORA DISPARAM AQUI
     if (won) {
       playSfx(SFX.victory);
@@ -886,7 +1042,7 @@ function endGame(won) {
           particleCount: 250,
           spread: 120,
           origin: { y: 0.5 },
-          zIndex: 99999 
+          zIndex: 99999,
         });
       }
     } else {
@@ -895,7 +1051,9 @@ function endGame(won) {
 
     // Mostra a interface
     document.getElementById("end-overlay").classList.remove("hidden");
-    document.getElementById("end-title").textContent = won ? "🏆 Parabéns!" : "Game Over";
+    document.getElementById("end-title").textContent = won
+      ? "🏆 Parabéns!"
+      : "Game Over";
     document.getElementById("end-message").textContent = won
       ? "Você completou as quatro fases e agora conhece melhor os desafios da gestão empresarial!"
       : "Você ficou sem vidas no meio da jornada. Que tal tentar de novo?";
@@ -912,14 +1070,17 @@ function endGame(won) {
 
   // Lógica de exibição: Se perdeu, exibe o QR Code primeiro e CHAMA a tela (com o som) depois.
   if (!won) {
-    showQRCodeModal({
-      image: "assets/images/qrcode_financas_na_mao.png",
-      duration: 30,
-      title: "Não desista do seu negócio!",
-      text: "Quer dominar a gestão do seu caixa e parar de perder dinheiro? Aponte a câmera e conheça a solução Finanças na Mão do Sebrae:"
-    }, () => {
-      showGameOverScreen();
-    });
+    showQRCodeModal(
+      {
+        image: "assets/images/qrcode_financas_na_mao.png",
+        duration: 30,
+        title: "Não desista do seu negócio!",
+        text: "Quer dominar a gestão do seu caixa e parar de perder dinheiro? Aponte a câmera e conheça a solução Finanças na Mão do Sebrae:",
+      },
+      () => {
+        showGameOverScreen();
+      },
+    );
   } else {
     // Se ganhou, o QR code já passou lá no diálogo do boss, então vai direto pra tela final
     showGameOverScreen();
@@ -1941,7 +2102,7 @@ class PhaseScene extends Phaser.Scene {
             blink: "narrador_blink",
           },
           null,
-          "Você sai da padaria frustrado. O prejuízo no caixa não sai da sua cabeça... Dizem que os comerciantes mais antigos da rua costumam passar por isso. É hora de caminhar e buscar respostas!",
+          "Você sai da padaria frustrado. O prejuízo no caixa não sai da sua cabeça... É hora de caminhar até em casa e buscar respostas.",
           () => {
             GameData.paused = false;
             this.physics.resume();
