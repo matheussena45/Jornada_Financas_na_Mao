@@ -612,7 +612,7 @@ const PHASES = [
         "Cuidado com essa armadilha comum:",
       ],
       resultMessages: {
-        3: "Brilhante! Você está totalmente pronto para gerir as finanças da sua padaria.",
+        3: "Brilhante! Você está totalmente pronto para gerir as finanças do seu Négocio.",
         2: "Muito bom trabalho. Com a nossa plataforma, essas pequenas dúvidas sumirão rapidinho.",
         1: "Temos um longo caminho pela frente, mas estamos aqui para ajudar.",
         0: "Foi bom você ter vindo ao Sebrae. Vamos precisar recomeçar do zero sua gestão!",
