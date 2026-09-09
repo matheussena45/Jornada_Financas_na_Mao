@@ -133,7 +133,7 @@ const PHASES = [
       {
         x: 380,
         y: 220,
-        text: "O famoso 'caderninho de fiado' acumulou mais de R$ 800,00 este mês. Sem data de pagamento, esse dinheiro simplesmente não existe no caixa.",
+        text: "O caderninho de fiado somou R$ 800 este mês. Sem data de pagamento, esse dinheiro não existe no caixa.",
       },
     ],
   },
@@ -162,17 +162,17 @@ const PHASES = [
       {
         x: 675,
         y: 320,
-        text: "Muitos negócios quebram porque misturam o dinheiro do dono com o da empresa. O caixa do comércio não é sua carteira pessoal!",
+        text: "Não misture o dinheiro do dono com o da empresa: o caixa do comércio não é sua carteira pessoal!",
       },
       {
         x: 1045,
         y: 320,
-        text: "Despesa fixa (como aluguel) você paga vendendo ou não. Já a variável (como embalagens) só aumenta quando suas vendas aumentam.",
+        text: "Despesa fixa você paga vendendo ou não. Já a variável só aumenta quando as vendas aumentam.",
       },
       {
         x: 1355,
         y: 320,
-        text: "Cuidado com a ilusão do Faturamento: ver muito dinheiro entrando não significa lucro. Lucro é apenas o que sobra depois de pagar as contas.",
+        text: "Faturamento não é lucro: ver dinheiro entrando não adianta se nada sobrar após pagar as contas.",
       },
     ],
     boss: {
@@ -185,27 +185,27 @@ const PHASES = [
       portraitHeight: 170,
       dialogueBottom: 200,
       greeting:
-        "Te vi fechando a padaria de cabeça quente. Sei bem como é, também quase fechei as portas no meu primeiro ano misturando as contas e vendendo sem controle. Deixa eu te dar umas dicas:",
+        "Te vi fechando a padaria preocupado. Quase quebrei misturando as contas. Vamos ver se você domina o básico:",
       introLines: [
-        "Para começar, vamos falar do essencial:",
-        "Boa reflexão! Próxima questão:",
-        "Última pergunta. Preste atenção aos detalhes:",
+        "Primeiro ponto essencial:",
+        "Próxima questão:",
+        "Última pergunta:",
       ],
       correctLines: [
-        "Exatamente! Esse é o pensamento.",
-        "Na mosca! É assim que se controla as finanças.",
-        "Perfeito. Se você aplicar isso amanhã, seu caixa já muda.",
+        "Exato! Esse é o caminho.",
+        "Na mosca! Boa visão.",
+        "Perfeito! Raciocínio afiado.",
       ],
       wrongLines: [
-        "Cuidado! Muitos fecham as portas por pensar assim:",
-        "Não é bem por aí. Pense no dinheiro do dia a dia:",
-        "Atenção com esse conceito, ele é uma armadilha comum:",
+        "Cuidado! Esse erro quebra empresas:",
+        "Atenção: pense no caixa do dia a dia:",
+        "Cuidado com essa armadilha:",
       ],
       resultMessages: {
-        3: "Excelente! Você tem a mentalidade financeira necessária. Está pronto para avançar e buscar ferramentas mais profissionais.",
-        2: "Muito bem! Você acertou a maioria. Com só mais um pouquinho de organização diária, você não terá mais surpresas.",
-        1: "Foi um começo, mas você precisa separar urgente a teoria da prática. Recomendo rever suas anotações.",
-        0: "Sinal vermelho, vizinho! Seus conceitos estão confusos. É fundamental estudar o básico se quiser manter a padaria aberta.",
+        3: "Excelente! Mentalidade financeira afiada. Você está pronto para avançar.",
+        2: "Muito bom! Mais um pouco de organização e você não terá surpresas no caixa.",
+        1: "Bom começo, mas revise os conceitos para não se perder na prática.",
+        0: "Sinal vermelho! Estude o básico antes que o caixa complique.",
       },
       questions: [
         {
@@ -218,7 +218,7 @@ const PHASES = [
           ],
           correct: 1,
           explanation:
-            "O fluxo de caixa é o pulmão financeiro do negócio. Ele registra todo o dinheiro que realmente entra e sai diariamente.",
+            "O fluxo de caixa registra todo o dinheiro que realmente entra e sai diariamente da empresa.",
         },
         {
           q: "Para formar o preço de venda, é importante conhecer:",
@@ -230,7 +230,7 @@ const PHASES = [
           ],
           correct: 1,
           explanation:
-            "O preço deve cobrir tudo o que você gasta (custos e despesas) e ainda deixar a sua margem de lucro projetada.",
+            "O preço deve cobrir todos os custos e despesas e ainda garantir a margem de lucro.",
         },
         {
           q: "O que é lucro?",
@@ -242,7 +242,7 @@ const PHASES = [
           ],
           correct: 2,
           explanation:
-            "Lucro não é faturamento. Lucro é o valor limpo que sobra para a empresa após todas as obrigações serem pagas.",
+            "Lucro é o valor líquido que sobra para a empresa após pagar todas as obrigações.",
         },
         {
           q: "O pró-labore é:",
@@ -254,7 +254,7 @@ const PHASES = [
           ],
           correct: 1,
           explanation:
-            "O pró-labore é o 'salário' do dono. Ele deve ter um valor fixo mensal, evitando que você tire dinheiro do caixa toda hora.",
+            "Pró-labore é o salário fixo mensal do dono pelo trabalho executado no negócio.",
         },
         {
           q: "O controle financeiro deve ser feito:",
@@ -266,7 +266,7 @@ const PHASES = [
           ],
           correct: 2,
           explanation:
-            "Acompanhamento frequente permite enxergar rombos antecipadamente e agir rápido, como no caso dos fiados.",
+            "Acompanhar o financeiro com frequência antecipa rombos no caixa e embasa decisões.",
         },
         {
           q: "Faturamento e lucro são a mesma coisa?",
@@ -278,7 +278,7 @@ const PHASES = [
           ],
           correct: 1,
           explanation:
-            "Faturamento é toda a receita de vendas. Lucro é o que sobra após você pagar o pão, a energia e os funcionários.",
+            "Faturamento é o total vendido; lucro é apenas o que sobra após pagar as contas.",
         },
         {
           q: "O dinheiro da empresa deve ser separado do dinheiro pessoal?",
@@ -290,7 +290,7 @@ const PHASES = [
           ],
           correct: 2,
           explanation:
-            "O princípio da Entidade diz que o patrimônio da empresa e do dono são distintos. Contas misturadas mascaram o prejuízo.",
+            "Misturar finanças pessoais com as da empresa mascara prejuízos e drena o caixa.",
         },
         {
           q: "Qual destes é um exemplo de despesa fixa?",
@@ -302,7 +302,7 @@ const PHASES = [
           ],
           correct: 2,
           explanation:
-            "O aluguel chega todo mês, mesmo se a padaria não vender um pão sequer. Ele não varia com a quantidade produzida.",
+            "O aluguel vence todo mês, mesmo se a empresa não realizar nenhuma venda.",
         },
         {
           q: "O que é uma despesa variável?",
@@ -314,7 +314,7 @@ const PHASES = [
           ],
           correct: 0,
           explanation:
-            "Quanto mais você vende, mais gasta com farinha, embalagens e taxas de maquininha. Isso é despesa variável.",
+            "Custos com insumos, embalagens e taxas variam diretamente conforme as vendas.",
         },
         {
           q: "Registrar todas as entradas e saídas ajuda a empresa a:",
@@ -326,7 +326,7 @@ const PHASES = [
           ],
           correct: 1,
           explanation:
-            "Só quem domina os números toma boas decisões, como saber o momento exato de cobrar um cliente ou cortar despesas.",
+            "Registros precisos mostram onde cortar gastos e evitam surpresas no final do mês.",
         },
       ],
     },
@@ -356,17 +356,17 @@ const PHASES = [
       {
         x: 440,
         y: 330,
-        text: "Capital de Giro é o oxigênio da empresa. É o dinheiro necessário para manter as portas abertas enquanto os pagamentos dos clientes não caem na conta.",
+        text: "Capital de Giro é o oxigênio da empresa: dinheiro necessário para manter as portas abertas até as vendas entrarem na conta.",
       },
       {
         x: 755,
         y: 330,
-        text: "Cuidado com o 'Descaminho do Desconto': baixar o preço sem calcular a margem de lucro pode fazer você pagar para trabalhar.",
+        text: "Cuidado com descontos: baixar o preço sem calcular a margem de lucro faz você pagar para trabalhar.",
       },
       {
         x: 1075,
         y: 340,
-        text: "Vender a prazo e comprar à vista é uma armadilha perigosa. O descompasso entre pagar e receber pode secar o caixa rapidamente.",
+        text: "Comprar à vista e vender a prazo é perigoso: esse descompasso pode secar o caixa rapidamente.",
       },
     ],
     boss: {
@@ -379,27 +379,27 @@ const PHASES = [
       portraitHeight: 200,
       dialogueBottom: 240,
       greeting:
-        "Olá! Vi você observando nossa fachada. Sou analista aqui no Sebrae. Pela sua expressão, o fluxo de caixa da padaria apertou, não é? Antes de entrarmos para usar o Finanças na Mão, preciso saber: você está realmente no controle do seu negócio?",
+        "Olá! Sou analista no Sebrae. Antes de entrarmos para usar o Finanças na Mão, vamos testar o controle do seu negócio:",
       introLines: [
-        "Vamos ao primeiro teste de controle:",
-        "Muito bem, vamos aprofundar a gestão:",
+        "Primeiro teste de controle:",
+        "Aprofundando a gestão:",
         "Última pergunta antes de entrarmos:",
       ],
       correctLines: [
-        "Isso! Você entendeu a dinâmica financeira.",
-        "Correto. O controle começa nas pequenas análises.",
-        "Perfeito. Esse é o olhar de um verdadeiro gestor.",
+        "Isso! Domínio claro do caixa.",
+        "Correto! Visão de gestor.",
+        "Perfeito! Raciocínio preciso.",
       ],
       wrongLines: [
-        "Atenção a este ponto, ele pode quebrar seu negócio:",
-        "Não exatamente. Lembre-se de como o caixa funciona:",
-        "Cuidado. Muitos empreendedores se perdem nessa hora:",
+        "Atenção: isso drena o caixa:",
+        "Não exatamente. Veja o detalhe:",
+        "Cuidado com essa armadilha financeira:",
       ],
       resultMessages: {
-        3: "Excelente! Você tem total domínio dos conceitos. Vamos entrar, o Finanças na Mão vai apenas automatizar o que você já sabe!",
-        2: "Muito bom. Faltam alguns detalhes, mas a base de controle está aí. Entre, vamos organizar isso de vez.",
-        1: "Você tem noções básicas, mas o controle ainda escapa das suas mãos. A consultoria será fundamental para você.",
-        0: "Alerta vermelho! Você está perdendo dinheiro sem perceber. Entre imediatamente, precisamos reestruturar a padaria.",
+        3: "Excelente! Conceitos dominados. O Finanças na Mão vai potencializar sua gestão!",
+        2: "Muito bom! Base sólida, faltando apenas alinhar detalhes no dia a dia.",
+        1: "Você tem noções básicas, mas o controle ainda escapa. O Sebrae vai te ajudar.",
+        0: "Alerta vermelho! Ajustes urgentes são necessários para estancar perdas no caixa.",
       },
       questions: [
         {
@@ -407,7 +407,7 @@ const PHASES = [
           options: ["Logomarca", "Fluxo de caixa", "Redes sociais", "Fachada"],
           correct: 1,
           explanation:
-            "Faturamento alto não garante saldo positivo. O Fluxo de Caixa mostra exatamente onde o dinheiro está vazando.",
+            "Faturamento alto não garante saldo: o Fluxo de Caixa revela onde o dinheiro está vazando.",
         },
         {
           q: "Você quer dar 20% de desconto em um produto. Antes disso, precisa saber:",
@@ -419,7 +419,7 @@ const PHASES = [
           ],
           correct: 1,
           explanation:
-            "Desconto sai direto do seu lucro. Se a margem não suportar, você estará pagando para vender o pão.",
+            "Desconto reduz seu lucro direto: confira antes se sua margem suporta a redução.",
         },
         {
           q: "O que é capital de giro?",
@@ -431,7 +431,7 @@ const PHASES = [
           ],
           correct: 0,
           explanation:
-            "É a reserva necessária para pagar fornecedores e despesas diárias enquanto o dinheiro das vendas a prazo não entra.",
+            "É a reserva necessária para pagar contas diárias enquanto os recebimentos a prazo não caem.",
         },
         {
           q: "Uma retirada pessoal frequente e sem controle pode acarretar em:",
@@ -443,7 +443,7 @@ const PHASES = [
           ],
           correct: 1,
           explanation:
-            "Retiradas aleatórias (sem ser um pró-labore fixo) desfalcam o capital de giro e deixam a empresa sem dinheiro para girar.",
+            "Retiradas sem controle reduzem o capital de giro e deixam a empresa sem liquidez.",
         },
         {
           q: "As taxas cobradas pelas maquininhas de cartão são iguais para todas as empresas?",
@@ -455,7 +455,7 @@ const PHASES = [
           ],
           correct: 2,
           explanation:
-            "Sempre negocie as taxas. Elas comem parte da sua margem e cada centavo conta no fim do mês.",
+            "As taxas variam por operadora e plano; negociar reduz despesas e protege a margem.",
         },
         {
           q: "Sua empresa vende a prazo, mas paga fornecedores à vista. Qual ponto merece atenção?",
@@ -467,7 +467,7 @@ const PHASES = [
           ],
           correct: 0,
           explanation:
-            "Esse é o Ciclo Financeiro. Se você paga antes de receber, precisará de muito capital de giro para não ficar no vermelho.",
+            "Pagar antes de receber exige alto capital de giro para não entrar no vermelho.",
         },
         {
           q: "Um produto vende bastante, mas você não sabe se ele dá lucro. O que precisa conhecer?",
@@ -479,7 +479,7 @@ const PHASES = [
           ],
           correct: 1,
           explanation:
-            "Volume não significa rentabilidade. É preciso analisar toda a estrutura de custos do produto para saber se ele é viável.",
+            "Volume alto não garante lucro: é essencial conhecer custos e margens de cada item.",
         },
         {
           q: "Antes de fazer uma compra grande para o estoque, o empreendedor deve avaliar:",
@@ -491,7 +491,7 @@ const PHASES = [
           ],
           correct: 1,
           explanation:
-            "Estoque parado é dinheiro parado. Descontos grandes só compensam se você tiver fluxo de caixa para suportar o pagamento.",
+            "Estoque parado é dinheiro travado; avalie o impacto das parcelas no fluxo de caixa.",
         },
         {
           q: "Um cliente compra hoje no cartão e você recebe depois. Esse prazo deve ser considerado em qual controle?",
@@ -503,7 +503,7 @@ const PHASES = [
           ],
           correct: 0,
           explanation:
-            "A venda acontece hoje, mas a entrada de dinheiro será futura. O Fluxo de Caixa precisa prever exatamente a data do recebimento.",
+            "O fluxo de caixa deve prever a data exata em que o dinheiro realmente entrará na conta.",
         },
         {
           q: "Se os custos aumentam e o preço de venda continua igual, o que tende a acontecer?",
@@ -515,7 +515,7 @@ const PHASES = [
           ],
           correct: 1,
           explanation:
-            "Se a farinha fica mais cara e o pão continua com o mesmo preço, a diferença é engolida, esmagando a sua margem de lucro.",
+            "Se os custos sobem e o preço permanece, a diferença reduz diretamente o lucro.",
         },
       ],
     },
@@ -542,17 +542,17 @@ const PHASES = [
       {
         x: 400,
         y: 210,
-        text: "Olá, Seja Bem vindo ao Sebrae Alto Oeste!",
+        text: "Bem-vindo ao Sebrae Alto Oeste!",
       },
       {
         x: 960,
         y: 235,
-        text: "Vender mais nem sempre aumenta o lucro. A Margem de Contribuição é vital: é o que sobra da venda, após os custos variáveis, para pagar as despesas fixas.",
+        text: "Margem de Contribuição: é o que sobra da venda, após custos variáveis, para pagar as contas fixas.",
       },
       {
         x: 1320,
         y: 235,
-        text: "Projeção é tudo. Se você tem 8 mil a receber e 12 mil a pagar no mês, terá uma necessidade de caixa de 4 mil. Antecipe-se com o Fluxo de Caixa!",
+        text: "Projeção é tudo: se faltará caixa no mês, antecipe-se e planeje com o Fluxo de Caixa!",
       },
     ],
   },
@@ -587,9 +587,9 @@ const PHASES = [
       portraitHeight: 330,
       dialogueBottom: 330,
       greeting:
-        "Bem-vindo ao Sebrae, Eu me chamo Franciel Monte! Chegou a hora de provar que você está pronto para utilizar o Finanças na Mão de forma definitiva.",
+        "Bem-vindo ao Sebrae! Sou Franciel Monte. Vamos ao teste final para dominar o Finanças na Mão de vez!",
       merchanText:
-        "Agora que avaliamos sua situação, está na hora de automatizar seu controle. Aponte a câmera e conheça o Finanças na Mão antes de finalizarmos:",
+        "Avaliação concluída! Hora de automatizar seu controle: aponte a câmera e conheça o Finanças na Mão:",
       qrCode: {
         image: "assets/images/qrcode_financas_na_mao.png",
         duration: 25,
@@ -597,25 +597,25 @@ const PHASES = [
         text: "Aponte a câmera e conheça a solução Finanças na Mão do Sebrae:",
       },
       introLines: [
-        "Vamos ao primeiro teste avançado:",
-        "Muito bem, vamos continuar:",
-        "Última pergunta para fecharmos com chave de ouro:",
+        "Primeiro teste avançado:",
+        "Próxima questão:",
+        "Última pergunta decisiva:",
       ],
       correctLines: [
-        "Excelente! Você está dominando isso.",
-        "Exato! É assim que se pensa no longo prazo.",
-        "Perfeito! Não tenho mais o que ensinar a você.",
+        "Excelente! Conceito afiado.",
+        "Exato! Pensamento de longo prazo.",
+        "Perfeito! Domínio total.",
       ],
       wrongLines: [
-        "Atenção nesse detalhe, ele é crucial:",
-        "Não foi bem isso, entenda o motivo:",
-        "Cuidado com essa armadilha comum:",
+        "Atenção a este detalhe:",
+        "Não foi bem isso, veja a regra:",
+        "Cuidado com essa armadilha:",
       ],
       resultMessages: {
-        3: "Brilhante! Você está totalmente pronto para gerir as finanças do seu Négocio.",
-        2: "Muito bom trabalho. Com a nossa plataforma, essas pequenas dúvidas sumirão rapidinho.",
-        1: "Temos um longo caminho pela frente, mas estamos aqui para ajudar.",
-        0: "Foi bom você ter vindo ao Sebrae. Vamos precisar recomeçar do zero sua gestão!",
+        3: "Brilhante! Você está pronto para gerir as finanças do seu negócio com segurança.",
+        2: "Muito bom! Com a nossa plataforma, pequenas dúvidas sumirão rápido.",
+        1: "Há um caminho a percorrer, mas o Sebrae está aqui para apoiar sua gestão.",
+        0: "Foi ótimo vir ao Sebrae. Vamos reestruturar sua gestão do zero!",
       },
       questions: [
         {
@@ -628,7 +628,7 @@ const PHASES = [
           ],
           correct: 0,
           explanation:
-            "A DRE confronta todas as receitas, custos e despesas do período para mostrar o resultado financeiro líquido exato do negócio.",
+            "A DRE confronta receitas e despesas para apurar se houve lucro ou prejuízo real.",
         },
         {
           q: "Você faturou R$ 30 mil no mês. Quanto sua empresa realmente ganhou?",
@@ -640,7 +640,7 @@ const PHASES = [
           ],
           correct: 2,
           explanation:
-            "Faturamento é apenas o volume de dinheiro que entrou. O ganho real (lucro) é o que sobra após pagar todas as obrigações.",
+            "Faturamento é apenas o total recebido; lucro é o que sobra após pagar custos e despesas.",
         },
         {
           q: "Você olha o saldo da conta para saber se a empresa está indo bem. Isso é suficiente?",
@@ -652,7 +652,7 @@ const PHASES = [
           ],
           correct: 2,
           explanation:
-            "Ter saldo em conta hoje não garante rentabilidade. Você pode ter dívidas futuras pesadas ou estar consumindo seu capital de giro sem perceber.",
+            "Saldo positivo hoje não prevê contas, tributos e dívidas dos próximos dias.",
         },
         {
           q: "O caixa está positivo hoje, mas há muitas contas vencendo nos próximos dias. Qual informação é mais importante?",
@@ -664,7 +664,7 @@ const PHASES = [
           ],
           correct: 1,
           explanation:
-            "A projeção do fluxo de caixa permite visualizar o futuro financeiro em curto e médio prazo, evitando surpresas quando as contas vencerem.",
+            "A projeção do fluxo de caixa antecipa se haverá dinheiro suficiente para honrar as contas.",
         },
         {
           q: "O que é ticket médio?",
@@ -676,7 +676,7 @@ const PHASES = [
           ],
           correct: 1,
           explanation:
-            "Conhecer o ticket médio ajuda a planejar estratégias para fazer com que cada cliente consuma mais a cada visita à sua empresa.",
+            "É o valor médio gasto por cliente a cada compra realizada na empresa.",
         },
         {
           q: "Sua empresa aumentou o faturamento, mas o lucro caiu. Isso é possível?",
@@ -688,7 +688,7 @@ const PHASES = [
           ],
           correct: 1,
           explanation:
-            "Vender mais exige estrutura. Se os custos operacionais dispararem acima do ganho em escala, a margem encolhe e o lucro cai.",
+            "Se os custos crescerem mais rápido que as vendas, a margem encolhe e o lucro cai.",
         },
         {
           q: "Sua DRE mostra lucro, mas falta dinheiro no caixa. Uma possível causa é:",
@@ -700,7 +700,7 @@ const PHASES = [
           ],
           correct: 0,
           explanation:
-            "A DRE registra a venda no ato (lucro no papel). Porém, vender a prazo significa que o dinheiro demora a entrar no caixa, causando falta de liquidez.",
+            "Vendas a prazo registram lucro contábil na hora, mas o dinheiro demora a entrar no caixa.",
         },
         {
           q: "Dois produtos têm o mesmo preço de venda, mas custos diferentes. Eles geram a mesma margem?",
@@ -712,7 +712,7 @@ const PHASES = [
           ],
           correct: 1,
           explanation:
-            "A margem de lucro é a diferença entre o preço praticado e os custos. Logo, custos menores com preços iguais resultam em margens maiores.",
+            "Produtos com menor custo e mesmo preço de venda geram margens de lucro maiores.",
         },
         {
           q: "A empresa tem R$ 8 mil para receber e R$ 12 mil para pagar no mesmo período. O que isso indica?",
@@ -724,7 +724,7 @@ const PHASES = [
           ],
           correct: 1,
           explanation:
-            "As saídas superam as entradas. Será necessário injetar R$ 4 mil de capital de giro ou antecipar recebíveis para não ficar no vermelho.",
+            "As saídas superam as entradas em R$ 4 mil, exigindo aporte de capital de giro.",
         },
         {
           q: "Qual indicador mostra quanto sobra das vendas após os custos e despesas variáveis para ajudar a pagar as despesas fixas?",
@@ -736,7 +736,7 @@ const PHASES = [
           ],
           correct: 2,
           explanation:
-            "A margem de contribuição é o valor vital que cada unidade vendida contribui para pagar aluguel, salários e gerar lucro para a empresa.",
+            "É o valor que sobra de cada venda para pagar os custos fixos e gerar lucro.",
         },
       ],
     },
@@ -1128,7 +1128,7 @@ const BOSS_WRONG_LINES = [
   "Quase! Deixa eu te explicar:",
   "Essa é traiçoeira, mas vamos entender:",
 ];
-const TYPE_SPEED_MS = 60;
+const TYPE_SPEED_MS = 40;
 const INFO_TYPE_SPEED_MS = 35;
 
 function pickLine(list, index) {
@@ -1308,7 +1308,7 @@ function startBossBattle(scene, phaseConfig, bossSprite, onComplete) {
 
     typeText(resultText, () => {
       if (isStale()) return;
-      const waitTime = isCorrect ? 1400 : 3200;
+      const waitTime = isCorrect ? 1200 : 2400;
       setTimeout(() => {
         if (isStale()) return;
         qIndex += 1;
@@ -2260,8 +2260,14 @@ const game = new Phaser.Game(config);
 function fitGameToScreen() {
   const wrapper = document.getElementById("game-wrapper");
   if (!wrapper) return;
+
   const scale = Math.min(window.innerWidth / 960, window.innerHeight / 540);
-  wrapper.style.transform = `translate(-50%, -50%) scale(${scale})`;
+  
+  // 1.25 a 1.30 estica entre 25% e 30% na vertical
+  // Ajuste esse valor se quiser esticar um pouco mais ou menos
+  const fatorVertical = 1.25; 
+
+  wrapper.style.transform = `translate(-50%, -50%) scale(${scale}, ${scale * fatorVertical})`;
 }
 window.addEventListener("resize", fitGameToScreen);
 fitGameToScreen();
