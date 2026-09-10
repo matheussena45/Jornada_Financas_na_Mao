@@ -33,9 +33,6 @@ const SFX = {
   bgm: new Audio("assets/audio/bgm.mp3"),
   type: new Audio("assets/audio/type_blip.wav"),
   tick: new Audio("assets/audio/countdown_tick.wav"),
-  locked: new Audio("assets/audio/locked.mp3"),
-  unlock: new Audio("assets/audio/unlock.mp3"),
-  complete: new Audio("assets/audio/completed.wav"),
   victory: new Audio("assets/audio/victory.mp3"),
   gameover: new Audio("assets/audio/gameover.mp3"),
 };
