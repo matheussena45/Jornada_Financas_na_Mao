@@ -149,9 +149,9 @@ const PHASES = [
     decorColor: 0x161a2b,
     levelWidth: 1990,
     bg: "street_night_bg.jpg",
-    bossX: 1850,
+    bossX: 1800,
     bossY: 485,
-    doorX: 1850,
+    doorX: 1770,
     groundY: 485,
     characterScale: 2.0,
     infoSpots: [
@@ -2479,4 +2479,27 @@ function showQRCodeModal(qrConfig, onDone) {
       cleanup();
     }
   }, 1000);
+}
+
+const btnReset = document.getElementById("btn-reset-ranking");
+
+if (btnReset) {
+  btnReset.addEventListener("click", () => {
+    // Abre a caixa de diálogo nativa com campo para digitar
+    const senhaDigitada = window.prompt("Área restrita à equipe.\nDigite a senha para resetar o ranking:");
+
+    // Se o usuário cancelou o prompt
+    if (senhaDigitada === null) return;
+
+    // Defina sua senha aqui (ex: 2026)
+    if (senhaDigitada === "2026") {
+      // Limpa a chave do ranking (ou localStorage.clear())
+      localStorage.removeItem("financas_na_mao_v1"); // use a sua chave exata do ranking
+      
+      alert("Ranking zerado com sucesso!");
+      window.location.reload(); // Recarrega a página para atualizar a lista limpa
+    } else {
+      alert("Senha incorreta!");
+    }
+  });
 }
