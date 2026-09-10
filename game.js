@@ -518,14 +518,14 @@ const PHASES = [
   },
   {
     id: "fase4",
-    name: "Consultoria Final",
+    name: "A Consultoria",
     startX: 140,
     startDirection: "right",
     hasBoss: false,
     exitInitiallyOpen: true,
     showExitArrow: true,
     phaseNumber: 4,
-    phaseLabel: "Ato Final",
+    phaseLabel: "Ato 4",
     skyColor: 0x18233d,
     groundColor: 0x2c3350,
     decorColor: 0x22304f,
@@ -554,7 +554,7 @@ const PHASES = [
   },
   {
     id: "fase5",
-    name: "Sala do Chefe",
+    name: "Desafio Final",
     startX: 80,
     startDirection: "right",
     hasBoss: true,
@@ -574,7 +574,7 @@ const PHASES = [
     characterScale: 4.0,
     infoSpots: [],
     boss: {
-      name: "Consultor Chefe",
+      name: "Mentor Financeiro",
       portrait: {
         idle: "boss3_idle.png",
         talk: "boss3_talk.png",
