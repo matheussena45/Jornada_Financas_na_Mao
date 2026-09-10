@@ -2007,7 +2007,7 @@ class PhaseScene extends Phaser.Scene {
         this.physics.pause();
         this.inputManager.setEnabled(false);
 
-        // NOVO: Apresentação inicial do narrador
+        // 1. Apresentação
         chamarNarrador(
           this,
           {
@@ -2017,9 +2017,9 @@ class PhaseScene extends Phaser.Scene {
             blink: "narrador_blink",
           },
           null,
-          `Olá, ${GameData.playerName}! Me chamo Gilmara, Trainee do Sebrae, e vou te guiar ao longo de toda essa jornada.`,
+          `Olá, ${GameData.playerName}! Me chamo Gilmara, do Sebrae, e vou te guiar nessa jornada.`,
           () => {
-            // Parte 1: O dia a dia
+            // 2. O fiado + O caixa vazio (unificados)
             chamarNarrador(
               this,
               {
@@ -2029,9 +2029,9 @@ class PhaseScene extends Phaser.Scene {
                 blink: "narrador_blink",
               },
               null,
-              `Mais um dia de muito trabalho na padaria! Pães quentinhos saindo do forno a todo vapor.`,
+              "Um cliente comprou no fiado cedo e agora, na hora de pagar o fornecedor... cadê o dinheiro? Caixa zerado!",
               () => {
-                // Parte 2: O conflito do fiado
+                // 3. Chamada para ação e abertura da saída
                 chamarNarrador(
                   this,
                   {
@@ -2041,44 +2041,16 @@ class PhaseScene extends Phaser.Scene {
                     blink: "narrador_blink",
                   },
                   null,
-                  "Logo cedo, um cliente habitual pediu para levar pães e frios dizendo: 'Anota no caderninho que acerto no fim do mês!'. Sem jeito de dizer não, você anotou.",
+                  "Vender fiado sem controle quase quebrou o seu negócio. Vá até a saída e vamos buscar ajuda!",
                   () => {
-                    // Parte 3: O problema no caixa
-                    chamarNarrador(
-                      this,
-                      {
-                        idle: "narrador_idle",
-                        talkOpen: "narrador_talk_open",
-                        talkMid: "narrador_talk_mid",
-                        blink: "narrador_blink",
-                      },
-                      null,
-                      "O expediente acabou. Na hora de pagar o fornecedor de farinha... cadê o dinheiro? O caixa está vazio e o caderno cheio de promessas!",
-                      () => {
-                        // Parte 4: Chamada para ação e liberação da porta
-                        chamarNarrador(
-                          this,
-                          {
-                            idle: "narrador_idle",
-                            talkOpen: "narrador_talk_open",
-                            talkMid: "narrador_talk_mid",
-                            blink: "narrador_blink",
-                          },
-                          null,
-                          "Vender fiado sem controle quase quebrou o seu negócio. É hora de buscar ajuda na cidade para organizar as contas. Vá até a saída!",
-                          () => {
-                            // Libera os controles e faz a seta de saída aparecer
-                            GameData.paused = false;
-                            this.physics.resume();
-                            this.inputManager.setEnabled(true);
+                    // Libera o jogo e abre a porta
+                    GameData.paused = false;
+                    this.physics.resume();
+                    this.inputManager.setEnabled(true);
 
-                            this.doorOpen = true;
-                            this.door.setVisible(true);
-                            this.doorGlow.setVisible(true);
-                          },
-                        );
-                      },
-                    );
+                    this.doorOpen = true;
+                    this.door.setVisible(true);
+                    this.doorGlow.setVisible(true);
                   },
                 );
               },
