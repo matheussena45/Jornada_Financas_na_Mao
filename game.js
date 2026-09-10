@@ -41,9 +41,8 @@ SFX.bgm.volume = 0.2;
 SFX.type.volume = 0.03;
 SFX.tick.volume = 1.0;
 SFX.tick.loop = false;
-SFX.locked.volume = 0.6;
-SFX.unlock.volume = 0.8;
-SFX.complete.volume = 0.8;
+SFX.victory.volume = 0.8;
+SFX.gameover.volume = 0.8;
 
 function playSfx(audio) {
   try {
