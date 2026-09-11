@@ -151,7 +151,7 @@ const PHASES = [
     bg: "street_night_bg.jpg",
     bossX: 1800,
     bossY: 485,
-    doorX: 1770,
+    doorX: 1850,
     groundY: 485,
     characterScale: 2.0,
     infoSpots: [
@@ -2090,7 +2090,7 @@ class PhaseScene extends Phaser.Scene {
             blink: "narrador_blink",
           },
           null,
-          "Seguindo o conselho do vizinho, você decide buscar ajuda profissional. A caminhada termina em frente ao escritório do Sebrae.",
+          "No dia seguinte, você decide buscar ajuda profissional. A caminhada termina em frente ao escritório do Sebrae.",
           () => {
             GameData.paused = false;
             this.physics.resume();
